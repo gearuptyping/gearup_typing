@@ -1,0 +1,108 @@
+/* FriendRequestBadge.css - Styles for friend request notification badge */
+
+.request-badge {
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 8px 16px;
+  margin-right: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  color: white;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.request-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(65, 88, 138, 0.4);
+}
+
+.request-badge:active {
+  transform: translateY(0);
+}
+
+.badge-icon {
+  font-size: 1.2rem;
+}
+
+.badge-count {
+  background: #ff4444;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .request-badge {
+    padding: 5px 10px;
+  }
+
+  .badge-icon {
+    font-size: 1rem;
+  }
+
+  .badge-count {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+    min-width: 16px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .request-badge {
+    padding: 4px 8px;
+    margin-right: 5px;
+    gap: 4px;
+  }
+
+  .badge-icon {
+    font-size: 0.9rem;
+  }
+
+  .badge-count {
+    font-size: 0.65rem;
+    padding: 1px 3px;
+    min-width: 14px;
+  }
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .badge-count,
+  .request-badge {
+    animation: none;
+    transition: none;
+  }
+
+  .badge-count {
+    animation: none;
+  }
+
+  .request-badge:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,850 @@
+/* MultiplayerLobby.css - Styles for multiplayer lobby with room cards, admin features, and car display */
+
+/* Main Container */
+.lobby-container {
+  min-height: 100vh;
+  background: #41588a;
+  color: white;
+  padding: 2rem;
+}
+
+/* Header Section */
+.lobby-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.lobby-title h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(65, 88, 138, 0.5);
+}
+
+.header-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+/* Online Users Counter */
+.online-counter {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(65, 88, 138, 0.3);
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.online-dot {
+  width: 10px;
+  height: 10px;
+  background: #44ff44;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.online-text {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Action Buttons */
+.lobby-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.create-room-btn,
+.quick-join-btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.create-room-btn {
+  background: #ffffff;
+  color: #41588a;
+  flex: 2;
+  border: 1px solid #ffffff;
+}
+
+.create-room-btn:hover {
+  background: #d5d5f7;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 78, 245, 0.5);
+}
+
+.create-room-btn:active {
+  transform: translateY(0);
+}
+
+.quick-join-btn {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  flex: 1;
+}
+
+.quick-join-btn:hover {
+  background: rgba(65, 88, 138, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(254, 254, 255, 0.5);
+  border-color: #ffffff;
+}
+
+.quick-join-btn:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+/* Rooms Section */
+.rooms-section {
+  margin-top: 2rem;
+}
+
+.rooms-section h2 {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Room Card */
+.room-card {
+  background: rgba(33, 42, 71, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.room-card:hover:not(.full) {
+  transform: translateY(-3px);
+  border-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(65, 88, 138, 0.5);
+  background: rgba(65, 88, 138, 0.3);
+}
+
+/* Admin Host Room Styling */
+.room-card.admin-host {
+  border: 2px solid gold;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(
+    135deg,
+    rgba(65, 88, 138, 0.7),
+    rgba(255, 215, 0, 0.1)
+  );
+  animation: adminRoomPulse 3s ease-in-out infinite;
+}
+
+.room-card.admin-host::before {
+  content: "👑";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  opacity: 0.3;
+  transform: rotate(15deg);
+  pointer-events: none;
+}
+
+.room-card.admin-host:hover {
+  border-color: gold;
+  box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes adminRoomPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+  }
+}
+
+.room-card.admin-host .room-host .value {
+  color: #ff6b6b;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.room-host .value {
+  color: #ffffff;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.room-host .value .admin-badge {
+  font-size: 0.9rem;
+  margin-left: 2px;
+}
+
+.room-host .value .car-display-container {
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
+.room-host .value > * {
+  vertical-align: middle;
+}
+
+.room-card.admin-host .room-host .value .admin-badge {
+  font-size: 1rem;
+  animation: crownSpin 3s ease-in-out infinite;
+}
+
+@keyframes crownSpin {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+}
+
+.room-card.admin-host .room-header h3 {
+  color: gold;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.room-card.full {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.room-header h3 {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.private-badge {
+  font-size: 1.2rem;
+}
+
+.room-details {
+  margin-bottom: 1.5rem;
+}
+
+.room-host,
+.room-level,
+.room-players {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.room-host .label,
+.room-level .label,
+.room-players .label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+/* Player Indicators */
+.player-indicators {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.player-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.player-dot.filled {
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(65, 88, 138, 0.5);
+}
+
+.room-card.admin-host .player-dot.filled {
+  background: gold;
+  box-shadow: 0 0 10px gold;
+}
+
+.room-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.room-status {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.room-status.waiting {
+  background: rgba(65, 88, 138, 0.4);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.room-card.admin-host .room-status.waiting {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: gold;
+  color: gold;
+}
+
+.room-status.playing {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+/* Join Button */
+.join-btn {
+  background: #ffffff;
+  color: #41588a;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #ffffff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.join-btn:hover {
+  background: #e0e0e0;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(65, 88, 138, 0.5);
+}
+
+.join-btn:active {
+  transform: scale(0.98);
+}
+
+.room-card.admin-host .join-btn {
+  background: gold;
+  color: #1e2a3a;
+  border-color: gold;
+}
+
+.room-card.admin-host .join-btn:hover {
+  background: #ffd700;
+  box-shadow: 0 0 20px gold;
+}
+
+.join-btn.admin-join {
+  background: gold;
+  color: #1e2a3a;
+  border: 2px solid gold;
+  font-weight: bold;
+}
+
+.join-btn.admin-join:hover {
+  background: #ffd700;
+  box-shadow: 0 0 20px gold;
+  transform: scale(1.05);
+}
+
+/* Loading State */
+.loading-rooms {
+  text-align: center;
+  padding: 4rem;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(65, 88, 138, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* No Rooms State */
+.no-rooms {
+  text-align: center;
+  padding: 4rem;
+  background: rgba(65, 88, 138, 0.1);
+  border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.no-rooms p {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.no-rooms span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+/* Create Room Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.create-modal {
+  background: #41588a;
+  border: 2px solid #ffffff;
+  border-radius: 15px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 0 50px rgba(65, 88, 138, 0.5);
+}
+
+.create-modal h2 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(65, 88, 138, 0.5);
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 15px rgba(65, 88, 138, 0.5);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  accent-color: #ffffff;
+}
+
+/* Error Message */
+.error-message {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  padding: 0.8rem;
+  border-radius: 5px;
+  border: 1px solid #ff4444;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.cancel-btn,
+.create-btn {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 68, 68, 0.1);
+}
+
+.cancel-btn:active {
+  transform: scale(0.98);
+}
+
+.create-btn {
+  background: #ffffff;
+  color: #41588a;
+  border: 1px solid #ffffff;
+}
+
+.create-btn:hover {
+  background: #e0e0e0;
+  box-shadow: 0 0 15px rgba(65, 88, 138, 0.5);
+}
+
+.create-btn:active {
+  transform: scale(0.98);
+}
+
+/* Admin Info Banner */
+.admin-info-banner {
+  background: rgba(255, 215, 0, 0.15);
+  border: 2px solid gold;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  animation: bannerPulse 3s ease-in-out infinite;
+  backdrop-filter: blur(5px);
+}
+
+.admin-info-banner .admin-icon {
+  font-size: 2rem;
+  animation: crownSpin 3s ease-in-out infinite;
+}
+
+.admin-info-banner .admin-message {
+  color: gold;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+@keyframes bannerPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    border-color: gold;
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    border-color: #ffd700;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .online-dot,
+  .room-card.admin-host,
+  .room-card.admin-host .room-host .value .admin-badge,
+  .loading-spinner,
+  .admin-info-banner,
+  .admin-info-banner .admin-icon {
+    animation: none;
+  }
+
+  .create-room-btn:hover,
+  .quick-join-btn:hover,
+  .join-btn:hover {
+    transform: none;
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .lobby-container {
+    padding: 1rem;
+  }
+
+  .lobby-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .lobby-title h1 {
+    font-size: 2rem;
+  }
+
+  .lobby-actions {
+    flex-direction: column;
+  }
+
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .create-modal {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .admin-info-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .admin-info-banner .admin-icon {
+    font-size: 1.5rem;
+  }
+
+  .admin-info-banner .admin-message {
+    font-size: 0.9rem;
+  }
+
+  .room-card.admin-host::before {
+    font-size: 1.2rem;
+    top: 5px;
+    right: 5px;
+  }
+
+  .room-host .value {
+    font-size: 0.9rem;
+    gap: 2px;
+  }
+
+  .room-host .value .car-display-container {
+    transform: scale(0.9);
+  }
+
+  .room-host .value .admin-badge {
+    font-size: 0.8rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .lobby-title h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .online-counter {
+    padding: 0.5rem 1rem;
+  }
+
+  .online-text {
+    font-size: 0.85rem;
+  }
+
+  .create-room-btn,
+  .quick-join-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .rooms-section h2 {
+    font-size: 1rem;
+  }
+
+  .room-card {
+    padding: 1rem;
+  }
+
+  .room-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .room-host .value {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .room-host .value .car-display-container {
+    transform: scale(0.85);
+  }
+
+  .room-status {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .join-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .create-modal h2 {
+    font-size: 1.4rem;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .cancel-btn,
+  .create-btn {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Very Small Mobile */
+@media (max-width: 380px) {
+  .lobby-container {
+    padding: 0.8rem;
+  }
+
+  .lobby-title h1 {
+    font-size: 1.3rem;
+  }
+
+  .create-room-btn,
+  .quick-join-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .room-card {
+    padding: 0.8rem;
+  }
+
+  .room-header h3 {
+    font-size: 1rem;
+  }
+
+  .private-badge {
+    font-size: 1rem;
+  }
+
+  .room-host .label,
+  .room-level .label,
+  .room-players .label {
+    font-size: 0.8rem;
+  }
+
+  .room-host .value {
+    font-size: 0.8rem;
+  }
+
+  .player-dot {
+    width: 16px;
+    height: 16px;
+  }
+
+  .create-modal {
+    padding: 1rem;
+  }
+
+  .create-modal h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-actions {
+    gap: 0.5rem;
+  }
+
+  .cancel-btn,
+  .create-btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}

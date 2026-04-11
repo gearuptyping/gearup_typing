@@ -1,0 +1,342 @@
+/* BlockedUsers.css - Styles for blocked users management page */
+
+.blocked-container {
+  min-height: 100vh;
+  background: #41588a;
+  padding: 2rem;
+  color: white;
+}
+
+/* Header */
+.blocked-header {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  position: relative;
+  text-align: center;
+}
+
+.back-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 600;
+  letter-spacing: 1px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.back-btn:active {
+  transform: translateY(-50%) scale(0.98);
+}
+
+.blocked-header h1 {
+  font-size: 2.2rem;
+  letter-spacing: 4px;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.blocked-count {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+/* Blocked Users List */
+.blocked-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Empty State */
+.no-blocked {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-blocked h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.no-blocked p {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2rem;
+}
+
+.goto-account-btn {
+  background: white;
+  color: #41588a;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.goto-account-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
+}
+
+.goto-account-btn:active {
+  transform: scale(0.98);
+}
+
+/* Blocked Card */
+.blocked-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.blocked-card:hover {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.blocked-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.blocked-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff4444, #ff8888);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.blocked-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.blocked-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.blocked-date {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Unblock Button */
+.unblock-btn {
+  background: transparent;
+  border: 2px solid #ff4444;
+  color: #ff4444;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.unblock-btn:hover:not(:disabled) {
+  background: #ff4444;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+}
+
+.unblock-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.unblock-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading State */
+.blocked-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #41588a;
+  color: white;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .back-btn,
+  .goto-account-btn,
+  .blocked-card,
+  .unblock-btn,
+  .loading-spinner {
+    animation: none;
+    transition: none;
+  }
+
+  .back-btn:hover,
+  .goto-account-btn:hover,
+  .blocked-card:hover,
+  .unblock-btn:hover {
+    transform: none;
+  }
+
+  .loading-spinner {
+    border-top-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .blocked-container {
+    padding: 1rem;
+  }
+
+  .blocked-header {
+    text-align: center;
+    padding-top: 50px;
+  }
+
+  .back-btn {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+  }
+
+  .back-btn:hover {
+    transform: translateX(-50%) scale(1.05);
+  }
+
+  .blocked-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .blocked-card {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .blocked-user-info {
+    flex-direction: column;
+  }
+
+  .unblock-btn {
+    width: 100%;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .blocked-container {
+    padding: 0.8rem;
+  }
+
+  .blocked-header h1 {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+
+  .back-btn {
+    padding: 6px 15px;
+    font-size: 0.8rem;
+  }
+
+  .blocked-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .blocked-name {
+    font-size: 0.95rem;
+  }
+
+  .blocked-date {
+    font-size: 0.7rem;
+  }
+
+  .unblock-btn {
+    padding: 6px 15px;
+    font-size: 0.7rem;
+  }
+
+  .no-blocked {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .no-blocked h3 {
+    font-size: 1.2rem;
+  }
+
+  .goto-account-btn {
+    padding: 8px 20px;
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,203 @@
+/* About.css - Styles for about page with #41588a theme */
+
+/* Main Container */
+.about-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #41588a;
+  color: #ffffff;
+}
+
+/* Page Title */
+.about-container h1 {
+  color: #ffffff;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-shadow: 0 0 15px rgba(65, 88, 138, 0.5);
+  position: relative;
+}
+
+/* Title Underline Effect */
+.about-container h1::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+}
+
+/* Content Box */
+.about-content {
+  max-width: 800px;
+  width: 100%;
+  text-align: left;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(65, 88, 138, 0.3);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+/* Section Styles */
+.about-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Section Headings */
+.about-section h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+/* Paragraph Styles */
+.about-section p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+/* List Styles */
+.about-section ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 1rem 0;
+}
+
+.about-section li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+/* List Bullet Points */
+.about-section li::before {
+  content: "▹";
+  position: absolute;
+  left: 0;
+  color: #ffffff;
+  opacity: 0.7;
+}
+
+/* Credits List (for image sources) */
+.credits-list {
+  margin: 1rem 0;
+}
+
+/* Link Styles */
+.about-section a {
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.about-section a:hover {
+  color: #ffd700;
+  border-bottom-color: #ffd700;
+}
+
+/* Credit Note */
+.credit-note {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 1.5rem;
+  }
+
+  .about-container h1 {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+  }
+
+  .about-content {
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .about-section p,
+  .about-section li {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .about-container {
+    padding: 1rem;
+  }
+
+  .about-container h1 {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+  }
+
+  .about-container h1::after {
+    width: 60px;
+  }
+
+  .about-content {
+    padding: 1rem;
+  }
+
+  .about-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .about-section p,
+  .about-section li {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .about-section li {
+    padding-left: 1.2rem;
+  }
+
+  .about-section li::before {
+    font-size: 0.8rem;
+  }
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .about-container h1::after,
+  .about-section a {
+    transition: none;
+  }
+}

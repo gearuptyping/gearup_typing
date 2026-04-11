@@ -1,0 +1,187 @@
+/* Contact.css - Styles for contact page with #41588a theme */
+
+/* Main Container */
+.contact-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #41588a;
+  color: #ffffff;
+}
+
+/* Page Title */
+.contact-container h1 {
+  color: #ffffff;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-shadow: 0 0 15px rgba(65, 88, 138, 0.5);
+  position: relative;
+}
+
+/* Title Underline Effect */
+.contact-container h1::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+}
+
+/* Content Box */
+.contact-content {
+  max-width: 500px;
+  text-align: center;
+  background: rgba(65, 88, 138, 0.4);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Description Text */
+.contact-content p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+}
+
+/* Contact Info Items */
+.contact-info p {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(65, 88, 138, 0.6);
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+/* Link Styles */
+.contact-info a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.contact-info a:active {
+  transform: scale(0.98);
+}
+
+/* Hover Effect for Contact Items */
+.contact-info p:hover {
+  transform: translateX(5px);
+  box-shadow: 0 0 15px rgba(65, 88, 138, 0.6);
+  background: rgba(65, 88, 138, 0.8);
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .contact-info p,
+  .contact-info a,
+  .contact-container h1::after {
+    animation: none;
+    transition: none;
+  }
+
+  .contact-info p:hover {
+    transform: none;
+  }
+
+  .contact-info a:active {
+    transform: none;
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 1.5rem;
+  }
+
+  .contact-container h1 {
+    font-size: 2rem;
+    letter-spacing: 3px;
+  }
+
+  .contact-container h1::after {
+    width: 80px;
+  }
+
+  .contact-content {
+    padding: 1.5rem;
+    max-width: 450px;
+  }
+
+  .contact-info p {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 1rem;
+  }
+
+  .contact-container h1 {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-container h1::after {
+    width: 60px;
+    bottom: -8px;
+  }
+
+  .contact-content {
+    padding: 1.2rem;
+    max-width: 100%;
+  }
+
+  .contact-content p {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-info p {
+    padding: 0.7rem;
+    font-size: 0.85rem;
+    word-break: break-word;
+  }
+
+  .contact-info a {
+    font-size: 0.85rem;
+  }
+}
+
+/* Very Small Mobile */
+@media (max-width: 380px) {
+  .contact-container h1 {
+    font-size: 1.3rem;
+  }
+
+  .contact-content {
+    padding: 1rem;
+  }
+
+  .contact-info p {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+}

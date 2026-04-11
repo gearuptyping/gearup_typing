@@ -1,0 +1,136 @@
+/* OnlineStatus.css - Styles for online/offline status indicator with pulse animation */
+
+.online-status-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+/* Status Dot Styles */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.status-dot.online {
+  background: #44ff44;
+  box-shadow: 0 0 10px rgba(68, 255, 68, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.status-dot.offline {
+  background: #888888;
+  opacity: 0.6;
+}
+
+.status-dot.loading {
+  background: rgba(255, 255, 255, 0.3);
+  animation: pulse 1.5s infinite;
+}
+
+/* Text Styles */
+.status-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+}
+
+.last-seen {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  font-style: italic;
+  margin-left: 2px;
+}
+
+/* Pulse Animation for Online Dot */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+/* Position Variations */
+.online-status-container.inline {
+  display: inline-flex;
+  margin-left: 5px;
+}
+
+.online-status-container.block {
+  display: flex;
+  margin: 2px 0;
+}
+
+/* Size Variations */
+.status-dot.small {
+  width: 8px;
+  height: 8px;
+}
+
+.status-dot.medium {
+  width: 10px;
+  height: 10px;
+}
+
+.status-dot.large {
+  width: 12px;
+  height: 12px;
+}
+
+/* Tooltip Style */
+.status-dot[title] {
+  cursor: help;
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .last-seen {
+    font-size: 0.7rem;
+  }
+
+  .status-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .online-status-container {
+    gap: 4px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .status-text {
+    font-size: 0.75rem;
+  }
+
+  .last-seen {
+    font-size: 0.65rem;
+  }
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .status-dot.online,
+  .status-dot.loading {
+    animation: none;
+  }
+
+  .status-dot.online {
+    opacity: 1;
+    transform: none;
+  }
+}

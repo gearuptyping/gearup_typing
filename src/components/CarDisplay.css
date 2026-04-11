@@ -1,0 +1,285 @@
+/* CarDisplay.css - Styles for car icon/name display with tooltip */
+
+.car-display-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+  cursor: help;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Size Variations */
+.car-small .car-icon {
+  font-size: 0.9rem;
+}
+
+.car-small .car-name {
+  font-size: 0.8rem;
+}
+
+.car-medium .car-icon {
+  font-size: 1.1rem;
+}
+
+.car-medium .car-name {
+  font-size: 1rem;
+}
+
+.car-large .car-icon {
+  font-size: 1.4rem;
+}
+
+.car-large .car-name {
+  font-size: 1.2rem;
+}
+
+/* Special Car Effects */
+.special-car .car-icon {
+  animation: specialGlow 2s ease-in-out infinite;
+}
+
+.special-car .car-name {
+  animation: specialPulse 2s ease-in-out infinite;
+}
+
+@keyframes specialGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px currentColor);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px currentColor);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes specialPulse {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+    font-weight: 700;
+  }
+}
+
+/* Car Icon */
+.car-icon {
+  display: inline-block;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.car-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Car Name */
+.car-name {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Tooltip Styles */
+.car-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  min-width: 200px;
+  z-index: 1000;
+  animation: tooltipFadeIn 0.2s ease;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.tooltip-arrow {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: #1e2a3a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: none;
+  border-left: none;
+  z-index: 1001;
+}
+
+.tooltip-content {
+  background: #1e2a3a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  text-align: left;
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.tooltip-icon {
+  font-size: 1.3rem;
+}
+
+.tooltip-name {
+  color: white;
+  font-size: 1rem;
+}
+
+.tooltip-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-special-badge {
+  background: rgba(255, 215, 0, 0.2);
+  color: gold;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  text-align: center;
+  border: 1px solid gold;
+}
+
+.tooltip-expiry {
+  color: #ff6b6b;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.tooltip-level {
+  color: #4aa3ff;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Right-aligned tooltip for chat messages */
+.car-display-container.right-aligned .car-tooltip {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.car-display-container.right-aligned .tooltip-arrow {
+  left: auto;
+  right: 10px;
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .car-tooltip {
+    min-width: 160px;
+  }
+
+  .tooltip-header {
+    gap: 4px;
+  }
+
+  .tooltip-icon {
+    font-size: 1.1rem;
+  }
+
+  .tooltip-name {
+    font-size: 0.9rem;
+  }
+
+  .tooltip-description {
+    font-size: 0.75rem;
+  }
+
+  .tooltip-special-badge {
+    font-size: 0.7rem;
+  }
+
+  .car-small .car-name {
+    font-size: 0.7rem;
+  }
+
+  .car-medium .car-name {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .car-display-container {
+    gap: 2px;
+  }
+
+  .car-tooltip {
+    min-width: 140px;
+  }
+
+  .tooltip-content {
+    padding: 8px;
+  }
+
+  .tooltip-icon {
+    font-size: 1rem;
+  }
+
+  .tooltip-name {
+    font-size: 0.8rem;
+  }
+
+  .tooltip-description {
+    font-size: 0.7rem;
+  }
+
+  .tooltip-special-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .car-small .car-name {
+    font-size: 0.65rem;
+  }
+
+  .car-medium .car-name {
+    font-size: 0.8rem;
+  }
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .special-car .car-icon,
+  .special-car .car-name,
+  .car-tooltip,
+  .car-icon {
+    animation: none;
+    transition: none;
+  }
+
+  .car-icon:hover {
+    transform: none;
+  }
+}

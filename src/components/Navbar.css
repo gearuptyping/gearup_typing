@@ -1,0 +1,521 @@
+/* Navbar.css - Navigation bar styles with badges, admin dropdown, and responsive design */
+
+/* Main Navbar Container */
+.navbar {
+  background: rgba(65, 88, 138, 0.95);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #ffffff;
+  box-shadow: 0 2px 20px rgba(65, 88, 138, 0.5);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+/* Brand/Logo Section */
+.nav-brand a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo {
+  height: 40px;
+  width: auto;
+  transition: all 0.3s ease;
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 10px rgba(65, 88, 138, 0.8));
+}
+
+.brand-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(65, 88, 138, 0.5);
+  line-height: 1.2;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Underline effect on hover */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.nav-links a:hover::after {
+  width: 80%;
+}
+
+/* User Section */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Friend Request Badge Styles */
+.request-badge {
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 0.9rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.request-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(65, 88, 138, 0.4);
+}
+
+.request-badge:active {
+  transform: translateY(0);
+}
+
+.request-badge .badge-icon {
+  font-size: 1.2rem;
+}
+
+.request-badge .badge-count {
+  background: #ff4444;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+  animation: badgePulse 2s infinite;
+}
+
+/* Message Badge Styles */
+.message-badge {
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 0.9rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.message-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(65, 88, 138, 0.4);
+}
+
+.message-badge:active {
+  transform: translateY(0);
+}
+
+.message-badge .badge-icon {
+  font-size: 1.2rem;
+}
+
+.message-badge .badge-count {
+  background: #0066ff;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+  animation: messagePulse 2s infinite;
+}
+
+/* Admin Badge Styles */
+.admin-badge {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 1em;
+  line-height: 1;
+  animation: crownGlow 2s ease-in-out infinite;
+  cursor: default;
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes crownGlow {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 4px gold);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+
+/* Admin Dropdown Styles */
+.admin-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.admin-nav-btn {
+  background: rgba(255, 215, 0, 0.15);
+  color: gold;
+  border: 2px solid gold;
+  border-radius: 30px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.admin-nav-btn:hover {
+  background: gold;
+  color: #1e2a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+.admin-nav-btn:active {
+  transform: translateY(0);
+}
+
+.admin-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #1e2a3a;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  margin-top: 10px;
+  min-width: 180px;
+  z-index: 1001;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.admin-dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.admin-dropdown-menu a:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: gold;
+  border-left: 3px solid gold;
+  padding-left: 25px;
+}
+
+.admin-dropdown-menu a:active {
+  background: rgba(255, 215, 0, 0.25);
+}
+
+/* Dropdown overlay */
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background: transparent;
+}
+
+/* User display name with admin badge */
+.user-name {
+  display: inline-flex;
+  align-items: center;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.3rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.9rem;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 0 10px rgba(65, 88, 138, 0.3);
+  transition: all 0.3s ease;
+}
+
+/* Special style for admin names */
+.user-name:has(.admin-badge) {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.user-name:has(.admin-badge) span:first-child {
+  color: #ff6b6b;
+  font-weight: 700;
+}
+
+/* Logout button */
+.logout-nav-btn {
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.logout-nav-btn:hover {
+  background: #ffffff;
+  color: #41588a;
+  box-shadow: 0 0 15px rgba(65, 88, 138, 0.7);
+}
+
+.logout-nav-btn:active {
+  transform: scale(0.98);
+}
+
+/* Shared Badge Animations */
+@keyframes badgePulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes messagePulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .nav-user {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .user-name {
+    max-width: 150px;
+  }
+
+  .request-badge,
+  .message-badge,
+  .admin-nav-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .request-badge .badge-icon,
+  .message-badge .badge-icon {
+    font-size: 1rem;
+  }
+
+  .request-badge .badge-count,
+  .message-badge .badge-count {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+    min-width: 16px;
+  }
+
+  .admin-dropdown-menu {
+    right: auto;
+    left: 0;
+    min-width: 160px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.8rem;
+  }
+
+  .nav-links {
+    gap: 0.3rem;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .brand-text {
+    font-size: 0.9rem;
+  }
+
+  .nav-logo {
+    height: 30px;
+  }
+
+  .nav-user {
+    gap: 0.3rem;
+  }
+
+  .user-name {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    max-width: 120px;
+  }
+
+  .request-badge,
+  .message-badge,
+  .admin-nav-btn,
+  .logout-nav-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .request-badge .badge-icon,
+  .message-badge .badge-icon {
+    font-size: 0.9rem;
+  }
+
+  .request-badge .badge-count,
+  .message-badge .badge-count {
+    font-size: 0.6rem;
+    padding: 1px 3px;
+    min-width: 14px;
+  }
+
+  .admin-nav-btn {
+    padding: 0.3rem 0.8rem;
+  }
+
+  .admin-dropdown-menu {
+    min-width: 140px;
+  }
+
+  .admin-dropdown-menu a {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .admin-badge,
+  .request-badge .badge-count,
+  .message-badge .badge-count,
+  .nav-logo,
+  .nav-links a,
+  .request-badge,
+  .message-badge,
+  .admin-nav-btn,
+  .logout-nav-btn {
+    animation: none;
+    transition: none;
+  }
+
+  .admin-nav-btn:hover,
+  .logout-nav-btn:hover,
+  .request-badge:hover,
+  .message-badge:hover {
+    transform: none;
+  }
+
+  .nav-links a:hover::after {
+    width: 0;
+  }
+}

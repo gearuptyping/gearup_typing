@@ -1,0 +1,54 @@
+/* AdminBadge.css - Crown icon styling for admin users */
+.admin-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 2px;
+  font-size: 1em;
+  line-height: 1;
+  animation: subtle-glow 2s ease-in-out infinite;
+  cursor: default;
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+}
+
+@keyframes subtle-glow {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 4px gold);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-badge {
+    animation: none;
+  }
+}
+
+.admin-badge.small {
+  font-size: 0.8em;
+}
+
+.admin-badge.large {
+  font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+  .admin-badge {
+    padding: 3px;
+    margin-left: 3px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .admin-badge {
+    padding: 2px;
+  }
+}

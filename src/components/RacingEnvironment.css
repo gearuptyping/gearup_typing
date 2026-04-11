@@ -1,0 +1,1030 @@
+/* RacingEnvironment.css - Complete styles for sky, scenery, track, cars, and weather */
+
+/* Main Container */
+.racing-environment {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  margin: 0px 0;
+}
+
+/* Sky Layer */
+.sky-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(180deg, #87ceeb 0%, #b0e0e6 100%);
+  transition: background 1s ease;
+  z-index: 1;
+}
+
+.sky-layer.night {
+  background: linear-gradient(180deg, #0a0a2a 0%, #1a1a3a 100%);
+}
+
+.sky-layer.sunset {
+  background: linear-gradient(180deg, #ff7e5f 0%, #feb47b 100%);
+}
+
+.sky-layer.dawn {
+  background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 100%);
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50px;
+  animation: floatCloud linear infinite;
+  z-index: 2;
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+}
+
+.cloud.rain-cloud {
+  background: rgba(80, 80, 90, 0.9);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.cloud1 {
+  width: 100px;
+  height: 35px;
+  top: 15%;
+  animation-duration: 90s;
+  animation-name: floatCloudRight;
+}
+
+.cloud1::before {
+  width: 50px;
+  height: 50px;
+  top: -25px;
+  left: 10px;
+}
+
+.cloud1::after {
+  width: 40px;
+  height: 40px;
+  top: -20px;
+  left: 45px;
+}
+
+.cloud2 {
+  width: 140px;
+  height: 45px;
+  top: 30%;
+  animation-duration: 120s;
+  animation-name: floatCloudLeft;
+  opacity: 0.8;
+}
+
+.cloud2::before {
+  width: 60px;
+  height: 60px;
+  top: -30px;
+  left: 20px;
+}
+
+.cloud2::after {
+  width: 50px;
+  height: 50px;
+  top: -25px;
+  left: 70px;
+}
+
+.cloud3 {
+  width: 80px;
+  height: 30px;
+  top: 45%;
+  animation-duration: 70s;
+  animation-name: floatCloudRight;
+  opacity: 0.7;
+}
+
+.cloud4 {
+  width: 120px;
+  height: 40px;
+  top: 10%;
+  animation-duration: 110s;
+  animation-name: floatCloudRight;
+  opacity: 0.6;
+}
+
+.cloud5 {
+  width: 90px;
+  height: 32px;
+  top: 50%;
+  animation-duration: 130s;
+  animation-name: floatCloudLeft;
+  opacity: 0.7;
+}
+
+@keyframes floatCloudRight {
+  0% {
+    transform: translateX(-150px);
+  }
+  100% {
+    transform: translateX(calc(100vw + 150px));
+  }
+}
+
+@keyframes floatCloudLeft {
+  0% {
+    transform: translateX(calc(100vw + 150px));
+  }
+  100% {
+    transform: translateX(-150px);
+  }
+}
+
+/* Sun */
+.sun {
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 50px;
+  height: 50px;
+  background: #ffdd00;
+  border-radius: 50%;
+  box-shadow: 0 0 50px #ffaa00;
+  z-index: 2;
+}
+
+.sun::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 221, 0, 0.4) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: sunGlow 3s infinite alternate;
+}
+
+@keyframes sunGlow {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Moon */
+.moon {
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 40px;
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 50%;
+  box-shadow: 0 0 30px #ffffff;
+  z-index: 2;
+}
+
+.moon::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 50%;
+  box-shadow: 15px 10px 0 #ccc;
+}
+
+/* Stars */
+.star {
+  position: absolute;
+  color: white;
+  font-size: 20px;
+  animation: twinkle 2s infinite alternate;
+  z-index: 2;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Birds */
+.birds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.bird-group {
+  position: absolute;
+  white-space: nowrap;
+  animation: flyBirdRightToLeft linear infinite;
+  will-change: transform;
+}
+
+.bird {
+  display: inline-block;
+  font-size: 24px;
+  margin: 0 3px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+  animation: birdFlap 0.5s infinite alternate;
+}
+
+.bird.eagle {
+  font-size: 28px;
+}
+
+.bird.dove {
+  font-size: 22px;
+}
+
+@keyframes flyBirdRightToLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-150vw);
+    opacity: 1;
+  }
+}
+
+@keyframes birdFlap {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Scenery Layer */
+.scenery-layer {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  right: 0;
+  height: 30%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Buildings */
+.building {
+  position: absolute;
+  bottom: 0;
+  border-radius: 3px 3px 0 0;
+}
+
+.building-skyscraper {
+  width: 35px;
+  background: #2c3e50;
+  border: 1px solid #34495e;
+}
+
+.building-skyscraper.blue {
+  background: #2980b9;
+}
+.building-skyscraper.grey {
+  background: #7f8c8d;
+}
+.building-skyscraper.black {
+  background: #2c3e50;
+}
+
+.building-skyscraper::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  width: 6px;
+  height: 6px;
+  background: #f1c40f;
+  box-shadow:
+    10px 0 0 #f1c40f,
+    0 10px 0 #f1c40f,
+    10px 10px 0 #f1c40f,
+    0 20px 0 #f1c40f,
+    10px 20px 0 #f1c40f;
+  border-radius: 1px;
+}
+
+.building-office {
+  width: 40px;
+  background: #bdc3c7;
+  border: 1px solid #95a5a6;
+}
+
+.building-office.silver {
+  background: #bdc3c7;
+}
+.building-office.light-blue {
+  background: #5dade2;
+}
+
+.building-office::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  right: 5px;
+  bottom: 8px;
+  background: repeating-linear-gradient(
+    0deg,
+    #2c3e50 0px,
+    #2c3e50 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.building-apartment {
+  width: 50px;
+  background: #cd6155;
+  border: 1px solid #943126;
+}
+
+.building-apartment.red {
+  background: #cd6155;
+}
+.building-apartment.beige {
+  background: #f5cba0;
+}
+
+.building-apartment::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 4px;
+  background: #f1c40f;
+  box-shadow:
+    0 12px 0 #f1c40f,
+    0 24px 0 #f1c40f;
+}
+
+.building-factory {
+  width: 45px;
+  background: #5d6d7e;
+  border: 1px solid #34495e;
+}
+
+.building-factory.dark-grey {
+  background: #5d6d7e;
+}
+.building-factory.brown {
+  background: #8e5c4a;
+}
+
+.building-factory::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  right: 5px;
+  width: 8px;
+  height: 20px;
+  background: #95a5a6;
+  border-radius: 2px;
+}
+
+.building-factory::after {
+  content: "";
+  position: absolute;
+  top: -25px;
+  right: 2px;
+  width: 12px;
+  height: 10px;
+  background: #e67e22;
+  border-radius: 50%;
+  animation: smoke 2s infinite;
+}
+
+@keyframes smoke {
+  0% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+}
+
+.building-department {
+  width: 55px;
+  background: #e67e22;
+  border: 1px solid #b85c0a;
+}
+
+.building-department.orange {
+  background: #e67e22;
+}
+.building-department.red {
+  background: #e74c3c;
+}
+
+.building-department::after {
+  content: "STORE";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px;
+}
+
+.building-school {
+  width: 48px;
+  background: #f4d03f;
+  border: 1px solid #b7950b;
+}
+
+.building-school.yellow {
+  background: #f4d03f;
+}
+.building-school.brown {
+  background: #b7950b;
+}
+
+.building-school::before {
+  content: "⚑";
+  position: absolute;
+  top: -15px;
+  right: 10px;
+  color: #e74c3c;
+  font-size: 16px;
+}
+
+.building-school::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: white;
+  box-shadow:
+    0 8px 0 white,
+    0 16px 0 white;
+}
+
+.building-hotel {
+  width: 40px;
+  background: #5dade2;
+  border: 1px solid #2c81ba;
+}
+
+.building-hotel.blue {
+  background: #5dade2;
+}
+.building-hotel.teal {
+  background: #1abc9c;
+}
+
+.building-hotel::after {
+  content: "HOTEL";
+  position: absolute;
+  top: -8px;
+  left: 5px;
+  right: 5px;
+  background: #e74c3c;
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 2px;
+}
+
+.building-house {
+  width: 35px;
+  background: #f7dc6f;
+  border: 1px solid #b7950b;
+}
+
+.building-house.yellow {
+  background: #f7dc6f;
+}
+.building-house.beige {
+  background: #f5cba0;
+}
+
+.building-house::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: -2px;
+  width: 39px;
+  height: 15px;
+  background: #a04000;
+  clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+}
+
+.building-house::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 12px;
+  width: 8px;
+  height: 12px;
+  background: #8b5a2b;
+  border-radius: 2px;
+}
+
+/* Trees */
+.tree-oak {
+  position: absolute;
+  bottom: 0;
+  width: 20px;
+  height: 50px;
+  background: #8b4513;
+  border-radius: 5px;
+  z-index: 3;
+}
+
+.tree-oak::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: -20px;
+  width: 60px;
+  height: 50px;
+  background: #27ae60;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px #2ecc71;
+}
+
+/* Mountains */
+.mountain {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 80px solid #27ae60;
+  filter: drop-shadow(2px 5px 3px rgba(0, 0, 0, 0.3));
+  z-index: 2;
+}
+
+/* Bushes */
+.bush {
+  position: absolute;
+  bottom: 0;
+  width: 25px;
+  height: 15px;
+  background: #2ecc71;
+  border-radius: 50%;
+  box-shadow:
+    8px -3px 0 #27ae60,
+    -5px -3px 0 #27ae60;
+  z-index: 3;
+}
+
+.bush::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 5px;
+  width: 12px;
+  height: 8px;
+  background: #2ecc71;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.bush.small {
+  transform: scale(0.7);
+}
+.bush.large {
+  transform: scale(1.3);
+}
+
+/* Track Layer */
+.track-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: #2c3e50;
+  z-index: 5;
+}
+
+.track-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #34495e 0px,
+    #34495e 4px,
+    #2c3e50 4px,
+    #2c3e50 8px
+  );
+}
+
+/* Lane Markings */
+.lanes {
+  position: absolute;
+  top: 20px;
+  left: 120px;
+  right: 120px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  z-index: 6;
+}
+
+.lane {
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #f1c40f 0px,
+    #f1c40f 30px,
+    transparent 30px,
+    transparent 60px
+  );
+  opacity: 0.8;
+}
+
+/* Start/Finish Lines */
+.start-line {
+  position: absolute;
+  left: 60px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 15;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  border-right: 2px solid #ffaa00;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.finish-line {
+  position: absolute;
+  right: 60px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 15;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  border-left: 2px solid #ffaa00;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.start-text {
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 6px 16px;
+  border-radius: 20px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  z-index: 16;
+  border: 2px solid #ffaa00;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
+  text-transform: uppercase;
+  transform-origin: center center;
+  line-height: 1;
+}
+
+.finish-text {
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 6px 16px;
+  border-radius: 20px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  z-index: 16;
+  border: 2px solid #ffaa00;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
+  text-transform: uppercase;
+  transform-origin: center center;
+  line-height: 1;
+}
+
+/* Cars Container */
+.cars-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.car-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+  transition: left 0.1s linear;
+}
+
+/* Username Styling */
+.username {
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 26;
+}
+
+.username.leaderboard {
+  font-size: 14px;
+  padding: 4px 12px;
+  top: -35px;
+}
+
+/* Car Display Name Styling */
+.car-display-name {
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  font-weight: normal;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 26;
+  transition: all 0.2s ease;
+}
+
+.car-display-name.leaderboard {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 12px;
+  bottom: -40px;
+  background: rgba(0, 0, 0, 0.8);
+  border-color: #ffaa00;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+}
+
+.car-display-name.special-car {
+  border-color: gold;
+  box-shadow: 0 0 10px gold;
+  animation: specialCarGlow 2s ease-in-out infinite;
+}
+
+@keyframes specialCarGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px gold;
+  }
+  50% {
+    box-shadow: 0 0 15px gold;
+  }
+}
+
+.car-container:hover .car-display-name {
+  transform: scale(1.05);
+  background: rgba(0, 0, 0, 0.9);
+  border-color: white;
+}
+
+/* Boost Effect */
+.boost-effect {
+  position: absolute;
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 3px;
+}
+
+.boost-line {
+  width: 20px;
+  height: 4px;
+  background: #ff6600;
+  animation: boostPulse 0.2s infinite;
+}
+
+@keyframes boostPulse {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
+/* Weather Effects - Rain */
+.rain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  animation: rain 0.5s linear infinite;
+}
+
+@keyframes rain {
+  0% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(400px);
+    opacity: 0;
+  }
+}
+
+/* Fog - Static (no animation) */
+.fog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 15;
+}
+
+/* Countdown Overlay */
+.countdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  font-size: 80px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 20px #ffffff;
+  animation: countdownPulse 0.5s ease;
+}
+
+@keyframes countdownPulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .racing-environment {
+    height: 300px;
+  }
+  .lanes {
+    left: 80px;
+    right: 80px;
+  }
+  .start-line {
+    left: 30px;
+    width: 40px;
+  }
+  .finish-line {
+    right: 30px;
+    width: 40px;
+  }
+  .start-text {
+    left: -10px;
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+  .finish-text {
+    right: -10px;
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+  .countdown-overlay {
+    font-size: 60px;
+  }
+  .bird {
+    font-size: 18px;
+  }
+  .bird.eagle {
+    font-size: 22px;
+  }
+  .username {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  .car-display-name {
+    font-size: 10px;
+    padding: 2px 6px;
+    bottom: -25px;
+  }
+  .car-display-name.leaderboard {
+    font-size: 12px;
+    padding: 3px 8px;
+    bottom: -35px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .lanes {
+    left: 60px;
+    right: 60px;
+  }
+  .start-line,
+  .finish-line {
+    width: 30px;
+  }
+  .start-text,
+  .finish-text {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  .car-display-name {
+    font-size: 9px;
+    padding: 1px 5px;
+  }
+  .car-display-name.leaderboard {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}

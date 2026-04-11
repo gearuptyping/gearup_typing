@@ -1,0 +1,104 @@
+/* MessageBadge.css - Styles for unread messages notification badge */
+
+.message-badge {
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 0.9rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.message-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(65, 88, 138, 0.4);
+}
+
+.message-badge:active {
+  transform: translateY(0);
+}
+
+.message-badge .badge-icon {
+  font-size: 1.2rem;
+}
+
+.message-badge .badge-count {
+  background: #0066ff;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+  animation: messagePulse 2s infinite;
+}
+
+@keyframes messagePulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .message-badge {
+    padding: 0.4rem 0.8rem;
+  }
+
+  .message-badge .badge-icon {
+    font-size: 1rem;
+  }
+
+  .message-badge .badge-count {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+    min-width: 16px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .message-badge {
+    padding: 0.3rem 0.6rem;
+    gap: 5px;
+  }
+
+  .message-badge .badge-icon {
+    font-size: 0.9rem;
+  }
+
+  .message-badge .badge-count {
+    font-size: 0.65rem;
+    padding: 1px 3px;
+    min-width: 14px;
+  }
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .message-badge,
+  .message-badge .badge-count {
+    animation: none;
+    transition: none;
+  }
+
+  .message-badge:hover {
+    transform: none;
+  }
+}

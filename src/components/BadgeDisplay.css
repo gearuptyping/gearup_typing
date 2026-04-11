@@ -1,0 +1,183 @@
+/* BadgeDisplay.css - Styles for badge icon with hover tooltip */
+
+.badge-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  cursor: help;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Size Variations */
+.badge-small .badge-icon {
+  font-size: 0.9rem;
+}
+
+.badge-medium .badge-icon {
+  font-size: 1.1rem;
+}
+
+.badge-large .badge-icon {
+  font-size: 1.4rem;
+}
+
+.badge-icon {
+  display: inline-block;
+  line-height: 1;
+  transition: all 0.2s ease;
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+.badge-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Tooltip Styles */
+.badge-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  min-width: 180px;
+  z-index: 1000;
+  animation: tooltipFadeIn 0.2s ease;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.tooltip-arrow {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: #1e2a3a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: none;
+  border-left: none;
+  z-index: 1001;
+}
+
+.tooltip-content {
+  background: #1e2a3a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.tooltip-badge-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.tooltip-icon {
+  font-size: 1.2rem;
+}
+
+.tooltip-name {
+  color: white;
+  font-size: 0.95rem;
+}
+
+.tooltip-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-levels {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+
+/* Right-aligned tooltip for chat messages */
+.badge-container.right-aligned .badge-tooltip {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.badge-container.right-aligned .tooltip-arrow {
+  left: auto;
+  right: 10px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .badge-tooltip {
+    min-width: 150px;
+  }
+
+  .tooltip-badge-name {
+    gap: 4px;
+  }
+
+  .tooltip-icon {
+    font-size: 1rem;
+  }
+
+  .tooltip-name {
+    font-size: 0.85rem;
+  }
+
+  .tooltip-description {
+    font-size: 0.75rem;
+  }
+
+  .tooltip-levels {
+    font-size: 0.7rem;
+  }
+}
+
+/* Small Mobile (under 480px) */
+@media (max-width: 480px) {
+  .badge-tooltip {
+    min-width: 130px;
+    margin-bottom: 8px;
+  }
+
+  .tooltip-content {
+    padding: 8px;
+  }
+
+  .tooltip-name {
+    font-size: 0.8rem;
+  }
+
+  .tooltip-description {
+    font-size: 0.7rem;
+  }
+}
+
+/* Reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .badge-icon,
+  .badge-tooltip {
+    animation: none;
+    transition: none;
+  }
+
+  .badge-icon:hover {
+    transform: none;
+  }
+}

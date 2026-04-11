@@ -1,0 +1,733 @@
+/* AdminBans.css - Styles for ban management page */
+
+.admin-bans {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e2a3a 0%, #41588a 100%);
+  color: white;
+  padding: 20px;
+}
+
+/* Header */
+.bans-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: rgba(65, 88, 138, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bans-header h1 {
+  font-size: 2rem;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.bans-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+.refresh-btn {
+  padding: 10px 25px;
+  background: rgba(65, 88, 138, 0.5);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.refresh-btn:hover {
+  background: #41588a;
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.refresh-btn:active {
+  transform: translateY(0);
+}
+
+/* Filters Section */
+.filters-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(30, 42, 58, 0.5);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-box {
+  flex: 3;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #41588a;
+  background: rgba(65, 88, 138, 0.2);
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.filter-controls {
+  flex: 1;
+}
+
+.filter-controls select {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-controls select:focus {
+  outline: none;
+  border-color: #41588a;
+  background: rgba(65, 88, 138, 0.2);
+}
+
+.filter-controls select option {
+  background: #1e2a3a;
+  color: white;
+}
+
+/* Stats Cards */
+.bans-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.bans-stats .stat-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  background: rgba(65, 88, 138, 0.2);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.bans-stats .stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.stat-info h3 {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
+
+/* Bans Table */
+.bans-table-container {
+  background: rgba(30, 42, 58, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+}
+
+.bans-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bans-table th {
+  text-align: left;
+  padding: 15px;
+  background: rgba(65, 88, 138, 0.3);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.bans-table td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bans-table tbody tr:hover {
+  background: rgba(65, 88, 138, 0.2);
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar-small {
+  width: 35px;
+  height: 35px;
+  background: #41588a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.reason-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.duration-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge-permanent {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.badge-temp {
+  background: rgba(255, 170, 0, 0.2);
+  color: #ffaa00;
+  border: 1px solid #ffaa00;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: rgba(68, 255, 68, 0.2);
+  color: #44ff44;
+  border: 1px solid #44ff44;
+}
+
+.status-badge.expired {
+  background: rgba(136, 136, 136, 0.2);
+  color: #888;
+  border: 1px solid #888;
+}
+
+.status-badge.permanent {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.view-btn,
+.unban-btn-small,
+.remove-btn {
+  padding: 5px 12px;
+  margin: 0 3px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.view-btn {
+  background: rgba(65, 88, 138, 0.5);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.view-btn:hover {
+  background: #41588a;
+}
+
+.view-btn:active {
+  transform: scale(0.98);
+}
+
+.unban-btn-small {
+  background: rgba(68, 255, 68, 0.2);
+  color: #44ff44;
+  border: 1px solid #44ff44;
+}
+
+.unban-btn-small:hover {
+  background: #44ff44;
+  color: #1e2a3a;
+}
+
+.unban-btn-small:active {
+  transform: scale(0.98);
+}
+
+.remove-btn {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.remove-btn:hover {
+  background: #ff4444;
+  color: white;
+}
+
+.remove-btn:active {
+  transform: scale(0.98);
+}
+
+/* Ban Modal */
+.ban-modal {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.user-info-section {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 20px;
+  background: rgba(65, 88, 138, 0.3);
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.user-avatar-large {
+  width: 80px;
+  height: 80px;
+  background: #41588a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-details h3 {
+  color: white;
+  margin-bottom: 5px;
+  font-size: 1.3rem;
+}
+
+.user-details .user-id {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+/* Ban Info Grid */
+.ban-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(65, 88, 138, 0.2);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-icon {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.info-content h4 {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.info-content p {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.info-content p.permanent {
+  color: #ff4444;
+}
+
+/* Ban Reason Section */
+.ban-reason-section {
+  margin-bottom: 30px;
+}
+
+.ban-reason-section h3 {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.reason-box {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #ff4444;
+}
+
+.reason-box p {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+/* Warnings Section */
+.warnings-section {
+  margin-bottom: 30px;
+}
+
+.toggle-warnings-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 170, 0, 0.2);
+  border: 2px solid #ffaa00;
+  border-radius: 8px;
+  color: #ffaa00;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggle-warnings-btn:hover {
+  background: #ffaa00;
+  color: #1e2a3a;
+}
+
+.toggle-warnings-btn:active {
+  transform: scale(0.98);
+}
+
+.warnings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.warning-item {
+  padding: 15px;
+  background: rgba(255, 68, 68, 0.1);
+  border-left: 3px solid #ff4444;
+  border-radius: 0 8px 8px 0;
+}
+
+.warning-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.warning-id {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+.warning-status {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.warning-status.active {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.warning-status.expired {
+  background: rgba(136, 136, 136, 0.2);
+  color: #888;
+  border: 1px solid #888;
+}
+
+.warning-reason {
+  color: white;
+  margin-bottom: 5px;
+}
+
+.warning-date {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+}
+
+.no-warnings {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Additional Info */
+.additional-info {
+  margin-top: 30px;
+}
+
+.additional-info h3 {
+  color: white;
+  margin-bottom: 15px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background: rgba(65, 88, 138, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value {
+  color: white;
+  font-weight: 600;
+}
+
+/* Confirm Modal */
+.confirm-modal {
+  max-width: 400px;
+  text-align: center;
+}
+
+.confirm-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.confirm-modal h3 {
+  color: white;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.confirm-modal p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.warning-text {
+  color: #ff4444 !important;
+  font-weight: 600;
+  background: rgba(255, 68, 68, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ff4444;
+}
+
+.confirm-btn {
+  padding: 12px 25px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background: #ff6666;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 68, 68, 0.3);
+}
+
+.confirm-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .refresh-btn,
+  .stat-card,
+  .view-btn,
+  .unban-btn-small,
+  .remove-btn,
+  .toggle-warnings-btn,
+  .confirm-btn {
+    animation: none;
+    transition: none;
+  }
+
+  .refresh-btn:hover,
+  .stat-card:hover,
+  .confirm-btn:hover {
+    transform: none;
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+  }
+
+  .bans-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .ban-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-info-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .bans-table th,
+  .bans-table td {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .user-cell {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .bans-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .bans-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .bans-table td {
+    font-size: 0.8rem;
+  }
+
+  .view-btn,
+  .unban-btn-small,
+  .remove-btn {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+
+  .user-avatar-large {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+
+  .info-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .info-content p {
+    font-size: 0.9rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+}
