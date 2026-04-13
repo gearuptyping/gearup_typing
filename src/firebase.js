@@ -9,16 +9,15 @@ import {
 } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
-// Firebase Configuration
+// Firebase Configuration (using environment variables for security)
 const firebaseConfig = {
-  apiKey: "AIzaSyCfQhv5TYbIYlm2Tvu6tf1eeT2zvTxzYlE",
-  authDomain: "gearup-typing.firebaseapp.com",
-  projectId: "gearup-typing",
-  storageBucket: "gearup-typing.firebasestorage.app",
-  messagingSenderId: "611913132333",
-  appId: "1:611913132333:web:01647ef1a7ad119d45cba4",
-  measurementId: "G-2Z4LHZPK72",
-  databaseURL: "https://gearup-typing-default-rtdb.firebaseio.com",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
 };
 
 // Initialize Firebase

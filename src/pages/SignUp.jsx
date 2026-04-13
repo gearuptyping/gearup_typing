@@ -1,0 +1,115 @@
+// SignUp.js - Sign up page for new user registration with Firebase
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { auth, createUserWithEmailAndPassword } from "../firebase";
+import "./AuthPages.css";
+
+const SignUp = () => {
+  // State Variables
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  // Handle form submission - creates new user account with Firebase
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      return setError("Passwords do not match");
+    }
+
+    if (password.length < 6) {
+      return setError("Password should be at least 6 characters");
+    }
+
+    try {
+      setError("");
+      setLoading(true);
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      console.log("User created:", userCredential.user.email);
+
+      // TODO: Add welcome email functionality here later
+      // Options: Firebase Extensions, EmailJS, or SendGrid
+
+      navigate("/");
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        setError("Email already in use. Please try logging in.");
+      } else if (error.code === "auth/weak-password") {
+        setError("Password is too weak. Use at least 6 characters.");
+      } else if (error.code === "auth/invalid-email") {
+        setError("Invalid email address.");
+      } else {
+        setError("Failed to create account: " + error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Main Render
+  return (
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Sign Up for GearUp Typing</h2>
+        <p className="auth-tagline">Join the racing typing community</p>
+
+        {error && <div className="error-message">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Enter password (min 6 characters)"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              placeholder="Confirm your password"
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="auth-button">
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        </form>
+
+        <p className="auth-redirect">
+          Already have an account? <Link to="/login">Log In</Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;

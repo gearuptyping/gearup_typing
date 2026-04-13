@@ -409,6 +409,66 @@
   transform: scale(0.98);
 }
 
+/* Car Icon Styles */
+.car-icon {
+  margin-right: 8px;
+  font-size: 1.2rem;
+  display: inline-block;
+  animation: carIdle 2s ease-in-out infinite;
+}
+
+@keyframes carIdle {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.player-car-icon {
+  font-size: 1.3rem;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+/* Racing boost animation for car icons */
+.player-info[style*="border-color"] .player-car-icon {
+  animation: carBoost 0.5s ease-in-out infinite;
+}
+
+@keyframes carBoost {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1) translateX(3px);
+  }
+}
+
+/* Mobile adjustments for car icons */
+@media (max-width: 480px) {
+  .car-icon {
+    font-size: 1rem;
+  }
+
+  .player-car-icon {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .car-icon {
+    font-size: 0.9rem;
+  }
+
+  .player-car-icon {
+    font-size: 1rem;
+  }
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .loading-spinner,

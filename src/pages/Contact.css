@@ -1,4 +1,4 @@
-/* Contact.css - Styles for contact page with #41588a theme */
+/* Contact.css - Styles for contact page with #41588a theme - STYLISH VERSION */
 
 /* Main Container */
 .contact-container {
@@ -10,6 +10,22 @@
   padding: 2rem;
   background: #41588a;
   color: #ffffff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated Background Pattern */
+.contact-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="none" width="100" height="100"/><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="20" r="2" fill="rgba(255,255,255,0.05)"/><circle cx="20" cy="80" r="2" fill="rgba(255,255,255,0.05)"/></svg>');
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Page Title */
@@ -21,6 +37,19 @@
   letter-spacing: 5px;
   text-shadow: 0 0 15px rgba(65, 88, 138, 0.5);
   position: relative;
+  z-index: 1;
+  animation: fadeInDown 0.8s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Title Underline Effect */
@@ -31,37 +60,134 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ffffff,
+    gold,
+    #ffffff,
+    transparent
+  );
+  border-radius: 3px;
 }
 
-/* Content Box */
+/* Content Box - STYLISH */
 .contact-content {
-  max-width: 500px;
+  max-width: 550px;
   text-align: center;
-  background: rgba(65, 88, 138, 0.4);
-  padding: 2rem;
-  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2.5rem;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.8s ease;
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Glowing border effect on hover */
+.contact-content:hover {
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(255, 215, 0, 0.1);
+  transform: translateY(-5px);
+}
+
+/* Email Icon Animation */
+.contact-content::before {
+  content: "📧";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  background: #41588a;
+  padding: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-5px);
+  }
 }
 
 /* Description Text */
 .contact-content p {
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
 }
 
 /* Contact Info Items */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .contact-info p {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: rgba(65, 88, 138, 0.6);
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 0;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #ffffff;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+/* Email specific styling */
+.contact-info p:first-of-type {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.1),
+    rgba(255, 215, 0, 0.05)
+  );
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+/* Discord specific styling */
+.contact-info p:last-of-type {
+  background: linear-gradient(
+    135deg,
+    rgba(88, 101, 242, 0.1),
+    rgba(88, 101, 242, 0.05)
+  );
+  border-color: rgba(88, 101, 242, 0.3);
+}
+
+/* Icon styling inside contact items */
+.contact-info p span:first-child {
+  font-size: 1.3rem;
 }
 
 /* Link Styles */
@@ -70,29 +196,39 @@
   text-decoration: none;
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
 }
 
 .contact-info a:hover {
+  color: gold;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
   text-decoration: underline;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
-
-.contact-info a:active {
-  transform: scale(0.98);
 }
 
 /* Hover Effect for Contact Items */
 .contact-info p:hover {
-  transform: translateX(5px);
-  box-shadow: 0 0 15px rgba(65, 88, 138, 0.6);
-  background: rgba(65, 88, 138, 0.8);
+  transform: translateX(8px) translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 215, 0, 0.5);
+}
+
+/* Discord hover specific */
+.contact-info p:last-of-type:hover {
+  border-color: #5865f2;
+  box-shadow: 0 10px 25px rgba(88, 101, 242, 0.2);
 }
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
+  .contact-container h1,
+  .contact-content,
+  .contact-content::before,
   .contact-info p,
-  .contact-info a,
-  .contact-container h1::after {
+  .contact-info a {
     animation: none;
     transition: none;
   }
@@ -101,8 +237,12 @@
     transform: none;
   }
 
-  .contact-info a:active {
+  .contact-content:hover {
     transform: none;
+  }
+
+  .contact-content::before {
+    animation: none;
   }
 }
 
@@ -122,13 +262,23 @@
   }
 
   .contact-content {
-    padding: 1.5rem;
+    padding: 2rem;
     max-width: 450px;
   }
 
+  .contact-content::before {
+    font-size: 2rem;
+    top: -15px;
+    padding: 8px;
+  }
+
   .contact-info p {
-    padding: 0.8rem;
+    padding: 1rem;
     font-size: 0.95rem;
+  }
+
+  .contact-info p span:first-child {
+    font-size: 1.1rem;
   }
 }
 
@@ -150,23 +300,34 @@
   }
 
   .contact-content {
-    padding: 1.2rem;
+    padding: 1.5rem;
     max-width: 100%;
+  }
+
+  .contact-content::before {
+    font-size: 1.5rem;
+    top: -12px;
+    padding: 6px;
   }
 
   .contact-content p {
     font-size: 0.9rem;
     margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
   }
 
   .contact-info p {
-    padding: 0.7rem;
+    padding: 0.8rem;
     font-size: 0.85rem;
     word-break: break-word;
   }
 
   .contact-info a {
     font-size: 0.85rem;
+  }
+
+  .contact-info p span:first-child {
+    font-size: 1rem;
   }
 }
 
@@ -177,11 +338,20 @@
   }
 
   .contact-content {
-    padding: 1rem;
+    padding: 1.2rem;
+  }
+
+  .contact-content::before {
+    font-size: 1.2rem;
+    top: -10px;
   }
 
   .contact-info p {
-    padding: 0.6rem;
+    padding: 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .contact-info a {
     font-size: 0.8rem;
   }
 }

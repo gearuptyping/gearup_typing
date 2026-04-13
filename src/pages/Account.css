@@ -1322,6 +1322,42 @@
   background: #5a71a0;
 }
 
+/* Garage Section */
+.garage-section {
+  margin-top: 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.garage-section h3 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-align: center;
+  letter-spacing: 2px;
+  font-size: 1.2rem;
+}
+
+/* Garage responsive */
+@media (max-width: 768px) {
+  .garage-section {
+    margin-top: 1.5rem;
+    padding: 0.8rem;
+  }
+
+  .garage-section h3 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .garage-section {
+    margin-top: 1rem;
+    padding: 0.5rem;
+  }
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .profile-admin-badge,

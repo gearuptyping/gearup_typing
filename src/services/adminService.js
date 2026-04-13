@@ -11,7 +11,7 @@ import {
 import { getAuth } from "firebase/auth";
 
 // Admin emails from .env file
-const ADMIN_EMAILS = (process.env.REACT_APP_ADMIN_EMAILS || "")
+const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS || "")
   .split(",")
   .filter((email) => email);
 console.log("✅ Admin emails loaded from .env:", ADMIN_EMAILS);
