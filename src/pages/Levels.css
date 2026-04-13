@@ -1,4 +1,4 @@
-/* Levels.css - Styles for level selection page with 50 level cards */
+/* Levels.css - Styles for level selection page with 24 levels + coming soon */
 
 /* Main Container */
 .levels-container {
@@ -175,6 +175,36 @@
   right: 1rem;
   font-size: 1.2rem;
   color: #ffaa00;
+}
+
+/* Coming Soon Card */
+.level-card.coming-soon {
+  background: rgba(65, 88, 138, 0.15);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  cursor: default;
+  opacity: 0.7;
+  text-align: center;
+  justify-content: center;
+}
+
+.coming-soon-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.coming-soon-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin: 0.5rem 0;
+}
+
+.coming-soon-message {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  font-style: italic;
 }
 
 /* Level Card Content */
@@ -391,6 +421,18 @@
     top: 0.5rem;
     right: 0.5rem;
   }
+
+  .coming-soon-icon {
+    font-size: 2rem;
+  }
+
+  .coming-soon-text {
+    font-size: 0.9rem;
+  }
+
+  .coming-soon-message {
+    font-size: 0.7rem;
+  }
 }
 
 /* Very Small Mobile */
@@ -430,6 +472,14 @@
   }
 
   .stat-value {
+    font-size: 0.8rem;
+  }
+
+  .coming-soon-icon {
+    font-size: 1.5rem;
+  }
+
+  .coming-soon-text {
     font-size: 0.8rem;
   }
 }

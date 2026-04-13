@@ -1,14 +1,14 @@
-// carService.js - Core car system for unlocking, display, and special weekly cars
+// carService.js - Simplified car system (7 cars, unlock every 3 levels)
 import { getDatabase, ref, get, update } from "firebase/database";
 
-// Regular car definitions - 10 cars unlocked by leveling up (maps to car-1.png to car-10.png)
+// Regular car definitions - 7 cars unlocked by leveling up (maps to car-1.png to car-7.png)
 export const REGULAR_CARS = {
   car1: {
     id: "car1",
     imageFile: "car-1.png",
     displayName: "ROOKIE",
     icon: "🚗",
-    levelRequired: 5,
+    levelRequired: 3,
     description: "Beginning your racing journey",
     order: 1,
   },
@@ -17,7 +17,7 @@ export const REGULAR_CARS = {
     imageFile: "car-2.png",
     displayName: "SPRINTER",
     icon: "🏎️",
-    levelRequired: 10,
+    levelRequired: 6,
     description: "Finding your speed",
     order: 2,
   },
@@ -26,7 +26,7 @@ export const REGULAR_CARS = {
     imageFile: "car-3.png",
     displayName: "RACER",
     icon: "🏁",
-    levelRequired: 15,
+    levelRequired: 9,
     description: "Ready to compete",
     order: 3,
   },
@@ -35,7 +35,7 @@ export const REGULAR_CARS = {
     imageFile: "car-4.png",
     displayName: "PRODIGY",
     icon: "⚡",
-    levelRequired: 20,
+    levelRequired: 12,
     description: "Natural talent on the track",
     order: 4,
   },
@@ -44,7 +44,7 @@ export const REGULAR_CARS = {
     imageFile: "car-5.png",
     displayName: "ELITE",
     icon: "💫",
-    levelRequired: 25,
+    levelRequired: 15,
     description: "Among the best",
     order: 5,
   },
@@ -53,7 +53,7 @@ export const REGULAR_CARS = {
     imageFile: "car-6.png",
     displayName: "MASTER",
     icon: "👑",
-    levelRequired: 30,
+    levelRequired: 18,
     description: "Master of the track",
     order: 6,
   },
@@ -62,36 +62,9 @@ export const REGULAR_CARS = {
     imageFile: "car-7.png",
     displayName: "LEGEND",
     icon: "🌟",
-    levelRequired: 35,
+    levelRequired: 24,
     description: "Legendary status",
     order: 7,
-  },
-  car8: {
-    id: "car8",
-    imageFile: "car-8.png",
-    displayName: "CHAMPION",
-    icon: "🏆",
-    levelRequired: 40,
-    description: "Champion racer",
-    order: 8,
-  },
-  car9: {
-    id: "car9",
-    imageFile: "car-9.png",
-    displayName: "HERO",
-    icon: "⚔️",
-    levelRequired: 45,
-    description: "Heroic achievements",
-    order: 9,
-  },
-  car10: {
-    id: "car10",
-    imageFile: "car-10.png",
-    displayName: "IMMORTAL",
-    icon: "♾️",
-    levelRequired: 50,
-    description: "Transcended beyond limits",
-    order: 10,
   },
 };
 
@@ -139,20 +112,17 @@ export const getSpecialCarById = (carId) => {
   return SPECIAL_CARS[carId] || null;
 };
 
-// Get the regular car for a given level
+// Get the regular car for a given level (updated for 24 levels, every 3 levels)
 export const getRegularCarForLevel = (level) => {
   const levelNum = parseInt(level);
 
-  if (levelNum <= 5) return REGULAR_CARS.car1;
-  if (levelNum <= 10) return REGULAR_CARS.car2;
-  if (levelNum <= 15) return REGULAR_CARS.car3;
-  if (levelNum <= 20) return REGULAR_CARS.car4;
-  if (levelNum <= 25) return REGULAR_CARS.car5;
-  if (levelNum <= 30) return REGULAR_CARS.car6;
-  if (levelNum <= 35) return REGULAR_CARS.car7;
-  if (levelNum <= 40) return REGULAR_CARS.car8;
-  if (levelNum <= 45) return REGULAR_CARS.car9;
-  return REGULAR_CARS.car10;
+  if (levelNum <= 3) return REGULAR_CARS.car1;
+  if (levelNum <= 6) return REGULAR_CARS.car2;
+  if (levelNum <= 9) return REGULAR_CARS.car3;
+  if (levelNum <= 12) return REGULAR_CARS.car4;
+  if (levelNum <= 15) return REGULAR_CARS.car5;
+  if (levelNum <= 18) return REGULAR_CARS.car6;
+  return REGULAR_CARS.car7;
 };
 
 // Get display name for any car
@@ -215,12 +185,12 @@ export const getUnlockedRegularCars = async (userId) => {
   }
 };
 
-// Check and unlock car when user reaches a milestone level
+// Check and unlock car when user reaches a milestone level (updated for 7 cars)
 export const checkAndUnlockCar = async (userId, newLevel) => {
   try {
     const db = getDatabase();
     const carForLevel = getRegularCarForLevel(newLevel);
-    const milestoneLevels = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+    const milestoneLevels = [3, 6, 9, 12, 15, 18, 24];
 
     if (!milestoneLevels.includes(parseInt(newLevel))) {
       return { unlocked: false, car: null };
@@ -392,21 +362,18 @@ export const initializeUserCars = async (userId) => {
   }
 };
 
-// Backfill cars for existing users
+// Backfill cars for existing users (updated for 7 cars, 24 levels)
 export const backfillUserCars = async (userId, currentLevel) => {
   try {
     const unlockedCars = [];
 
-    if (currentLevel >= 5) unlockedCars.push("car1");
-    if (currentLevel >= 10) unlockedCars.push("car2");
-    if (currentLevel >= 15) unlockedCars.push("car3");
-    if (currentLevel >= 20) unlockedCars.push("car4");
-    if (currentLevel >= 25) unlockedCars.push("car5");
-    if (currentLevel >= 30) unlockedCars.push("car6");
-    if (currentLevel >= 35) unlockedCars.push("car7");
-    if (currentLevel >= 40) unlockedCars.push("car8");
-    if (currentLevel >= 45) unlockedCars.push("car9");
-    if (currentLevel >= 50) unlockedCars.push("car10");
+    if (currentLevel >= 3) unlockedCars.push("car1");
+    if (currentLevel >= 6) unlockedCars.push("car2");
+    if (currentLevel >= 9) unlockedCars.push("car3");
+    if (currentLevel >= 12) unlockedCars.push("car4");
+    if (currentLevel >= 15) unlockedCars.push("car5");
+    if (currentLevel >= 18) unlockedCars.push("car6");
+    if (currentLevel >= 24) unlockedCars.push("car7");
 
     const db = getDatabase();
     await update(ref(db, `users/${userId}`), {

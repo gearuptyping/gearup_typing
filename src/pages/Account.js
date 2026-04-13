@@ -20,12 +20,6 @@ import {
   unbanUser,
   isUserBanned,
 } from "../services/adminService";
-import BadgeCollection from "../components/BadgeCollection";
-import BadgeDisplay from "../components/BadgeDisplay";
-import { checkForBadgeUnlock } from "../services/badgeService";
-import BadgeUnlockModal from "../components/BadgeUnlockModal";
-import Garage from "../components/Garage";
-import { initializeUserCars, backfillUserCars } from "../services/carService";
 import ReportModal from "../components/ReportModal";
 import OnlineStatus from "../components/OnlineStatus";
 import AdminBadge from "../components/AdminBadge";
@@ -50,14 +44,6 @@ const Account = ({ user }) => {
   // Admin Status States
   const [isAdmin, setIsAdmin] = useState(false);
   const [friendsAdminStatus, setFriendsAdminStatus] = useState({});
-
-  // Garage Section State
-  const [showGarage, setShowGarage] = useState(false);
-
-  // Badge System States
-  const [showBadgeCollection, setShowBadgeCollection] = useState(false);
-  const [newBadgeUnlocked, setNewBadgeUnlocked] = useState(null);
-  const [showUnlockModal, setShowUnlockModal] = useState(false);
 
   // Admin Action States
   const [selectedUserForAction, setSelectedUserForAction] = useState(null);
@@ -91,18 +77,6 @@ const Account = ({ user }) => {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [blockingId, setBlockingId] = useState(null);
 
-  // Scroll to badges if coming from unlock modal
-  useEffect(() => {
-    if (location.state?.scrollToBadges) {
-      setShowBadgeCollection(true);
-      setTimeout(() => {
-        document.getElementById("badge-collection-section")?.scrollIntoView({
-          behavior: "smooth",
-        });
-      }, 100);
-    }
-  }, [location]);
-
   // Load User Data from Firebase
   useEffect(() => {
     const loadUserData = async () => {
@@ -133,28 +107,6 @@ const Account = ({ user }) => {
         } else {
           setNextLevelRequirement("Max level reached!");
         }
-
-        if (!data.unlockedCars) {
-          await backfillUserCars(user.uid, highestLevel);
-        }
-
-        const checkInitialBadges = async () => {
-          const milestoneLevels = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
-          for (const milestoneLevel of milestoneLevels) {
-            if (highestLevel >= milestoneLevel) {
-              const result = await checkForBadgeUnlock(
-                user.uid,
-                milestoneLevel,
-              );
-              if (result.unlocked) {
-                setNewBadgeUnlocked(result.badge);
-                setShowUnlockModal(true);
-              }
-            }
-          }
-        };
-
-        checkInitialBadges();
       } else {
         const initialName = user.email.split("@")[0];
         const newUser = {
@@ -168,7 +120,6 @@ const Account = ({ user }) => {
           createdAt: new Date().toISOString(),
         };
         await set(userRef, newUser);
-        await initializeUserCars(user.uid);
 
         setDisplayName(initialName);
         setLevel(1);
@@ -456,22 +407,6 @@ const Account = ({ user }) => {
     return progressToNext;
   };
 
-  // Toggle badge collection visibility
-  const toggleBadgeCollection = () => {
-    setShowBadgeCollection(!showBadgeCollection);
-  };
-
-  // Toggle garage visibility
-  const toggleGarage = () => {
-    setShowGarage(!showGarage);
-  };
-
-  // Handle badge unlock modal close
-  const handleBadgeUnlockClose = () => {
-    setShowUnlockModal(false);
-    setNewBadgeUnlocked(null);
-  };
-
   // Main Render
   return (
     <div className="account-container">
@@ -540,11 +475,7 @@ const Account = ({ user }) => {
                 </div>
               ) : (
                 <div className="display-username">
-                  <h2>
-                    {displayName}
-                    {isAdmin && <AdminBadge />}
-                    <BadgeDisplay userId={user?.uid} size="medium" />
-                  </h2>
+                  <h2>{displayName}</h2>
                   <button onClick={() => setEditing(true)} className="edit-btn">
                     ✎ EDIT
                   </button>
@@ -604,21 +535,6 @@ const Account = ({ user }) => {
                 </div>
               </div>
             )}
-
-            {/* Badge Collection Toggle Button */}
-            <button
-              className="badge-collection-toggle"
-              onClick={toggleBadgeCollection}
-            >
-              {showBadgeCollection
-                ? "HIDE BADGES ▲"
-                : "VIEW BADGE COLLECTION ▼"}
-            </button>
-
-            {/* Garage Toggle Button */}
-            <button className="garage-toggle-btn" onClick={toggleGarage}>
-              {showGarage ? "HIDE GARAGE ▲" : "VIEW GARAGE ▼"}
-            </button>
           </div>
         </div>
 
@@ -790,7 +706,6 @@ const Account = ({ user }) => {
                     <span className="friend-name">
                       {friend.displayName}
                       {friendsAdminStatus[friend.userId] && <AdminBadge />}
-                      <BadgeDisplay userId={friend.userId} size="small" />
                       <OnlineStatus userId={friend.userId} />
                     </span>
                     <span className="friend-added">
@@ -880,20 +795,6 @@ const Account = ({ user }) => {
           </div>
         </div>
       </div>
-
-      {/* Badge Collection Section */}
-      {showBadgeCollection && (
-        <div id="badge-collection-section" className="badge-collection-wrapper">
-          <BadgeCollection userId={user?.uid} />
-        </div>
-      )}
-
-      {/* Garage Section */}
-      {showGarage && (
-        <div className="garage-wrapper">
-          <Garage userId={user?.uid} />
-        </div>
-      )}
 
       {/* Report Modal */}
       {showReportModal && selectedFriend && (
@@ -1038,17 +939,6 @@ const Account = ({ user }) => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Badge Unlock Modal */}
-      {showUnlockModal && newBadgeUnlocked && (
-        <BadgeUnlockModal
-          badge={newBadgeUnlocked}
-          onClose={handleBadgeUnlockClose}
-          onCollect={handleBadgeUnlockClose}
-          userId={user?.uid}
-          showConfetti={true}
-        />
       )}
     </div>
   );
