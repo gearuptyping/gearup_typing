@@ -11,4 +11,10 @@ export default defineConfig({
     outDir: "build",
     sourcemap: false,
   },
+  // THIS IS THE KEY FIX - Force Vite to treat .js files as JSX
+  esbuild: {
+    loader: "jsx",
+    include: /\.(js|jsx)$/,
+    exclude: [],
+  },
 });
