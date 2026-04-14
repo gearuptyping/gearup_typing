@@ -24,6 +24,7 @@ import ReportModal from "../components/ReportModal";
 import OnlineStatus from "../components/OnlineStatus";
 import AdminBadge from "../components/AdminBadge";
 import Garage from "../components/Garage";
+import FriendChat from "../components/FriendChat";
 import {
   checkIfUserIsAdmin,
   getUsersAdminStatus,
@@ -77,6 +78,13 @@ const Account = ({ user }) => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [blockingId, setBlockingId] = useState(null);
+
+  // Chat States
+  const [chatFriend, setChatFriend] = useState(null);
+  const [showChatModal, setShowChatModal] = useState(false);
+
+  // Three-dot menu state
+  const [openMenuFor, setOpenMenuFor] = useState(null);
 
   // Load User Data from Firebase
   useEffect(() => {
@@ -178,6 +186,15 @@ const Account = ({ user }) => {
     return () => unsubscribe();
   }, [user]);
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setOpenMenuFor(null);
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   // Handle Display Name Update
   const handleUpdateDisplayName = async () => {
     if (!displayName.trim()) return;
@@ -246,8 +263,14 @@ const Account = ({ user }) => {
   };
 
   // Handle Remove Friend
-  const handleRemoveFriend = async (friendId) => {
-    if (!window.confirm("Are you sure you want to remove this friend?")) return;
+  const handleRemoveFriend = async (friendId, friendName) => {
+    setOpenMenuFor(null);
+    if (
+      !window.confirm(
+        `Are you sure you want to remove ${friendName} from your friends?`,
+      )
+    )
+      return;
 
     const result = await removeFriend(user.uid, friendId);
     if (result.success) {
@@ -258,12 +281,14 @@ const Account = ({ user }) => {
 
   // Handle Report User
   const handleReportUser = (friend) => {
+    setOpenMenuFor(null);
     setSelectedFriend(friend);
     setShowReportModal(true);
   };
 
   // Handle Block User
   const handleBlockUser = async (friend) => {
+    setOpenMenuFor(null);
     if (
       !window.confirm(
         `Are you sure you want to block ${friend.displayName}? They will be removed from your friends list and cannot message you.`,
@@ -282,6 +307,13 @@ const Account = ({ user }) => {
     } else {
       alert("Failed to block user: " + result.error);
     }
+  };
+
+  // Handle Chat with Friend
+  const handleChatFriend = (friend) => {
+    setOpenMenuFor(null);
+    setChatFriend(friend);
+    setShowChatModal(true);
   };
 
   // Admin Action Handlers
@@ -696,7 +728,7 @@ const Account = ({ user }) => {
             </div>
           )}
 
-          {/* Friends List */}
+          {/* Friends List with Three-Dot Menu */}
           <div className="friends-list">
             {friends.length === 0 ? (
               <div className="no-friends">
@@ -724,76 +756,58 @@ const Account = ({ user }) => {
                       )}
                   </div>
 
-                  {/* Action Buttons Container */}
+                  {/* Three-Dot Menu Button */}
                   <div className="friend-actions">
-                    {/* Admin Actions Dropdown */}
-                    {isAdmin && friend.userId !== user.uid && (
-                      <div className="admin-actions-dropdown">
+                    <button
+                      className="three-dot-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenMenuFor(
+                          openMenuFor === friend.userId ? null : friend.userId,
+                        );
+                      }}
+                      title="Actions"
+                    >
+                      ⋯
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {openMenuFor === friend.userId && (
+                      <div
+                        className="three-dot-menu"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <button
-                          className="admin-actions-btn"
-                          onClick={() => toggleWarnings(friend.userId)}
-                          title="Admin Actions"
+                          className="menu-item chat"
+                          onClick={() => handleChatFriend(friend)}
                         >
-                          👑
+                          💬 Chat
                         </button>
-                        {expandedUser === friend.userId && showWarnings && (
-                          <div className="admin-dropdown-content">
-                            <button
-                              className="admin-action-item warn"
-                              onClick={() => {
-                                setAdminActionType("warn");
-                                handleAdminAction(friend);
-                              }}
-                            >
-                              ⚠️ Issue Warning
-                            </button>
-                            <button
-                              className="admin-action-item ban"
-                              onClick={() => {
-                                setAdminActionType("ban");
-                                handleAdminAction(friend);
-                              }}
-                            >
-                              🚫 Ban User
-                            </button>
-                            <button
-                              className="admin-action-item view-warnings"
-                              onClick={() => toggleWarnings(friend.userId)}
-                            >
-                              📋 View Warnings ({userWarnings.length})
-                            </button>
-                          </div>
-                        )}
+                        <button
+                          className="menu-item block"
+                          onClick={() => handleBlockUser(friend)}
+                        >
+                          🚫 Block
+                        </button>
+                        <button
+                          className="menu-item report"
+                          onClick={() => handleReportUser(friend)}
+                        >
+                          ⚠️ Report
+                        </button>
+                        <button
+                          className="menu-item remove"
+                          onClick={() =>
+                            handleRemoveFriend(
+                              friend.userId,
+                              friend.displayName,
+                            )
+                          }
+                        >
+                          ❌ Remove Friend
+                        </button>
                       </div>
                     )}
-
-                    {/* Report Button */}
-                    <button
-                      onClick={() => handleReportUser(friend)}
-                      className="report-btn"
-                      title="Report user"
-                    >
-                      ⚠️
-                    </button>
-
-                    {/* Block Button */}
-                    <button
-                      onClick={() => handleBlockUser(friend)}
-                      className="block-btn"
-                      disabled={blockingId === friend.userId}
-                      title="Block user"
-                    >
-                      {blockingId === friend.userId ? "..." : "🔨"}
-                    </button>
-
-                    {/* Remove Friend Button */}
-                    <button
-                      onClick={() => handleRemoveFriend(friend.userId)}
-                      className="remove-friend-btn"
-                      title="Remove friend"
-                    >
-                      ✕
-                    </button>
                   </div>
                 </div>
               ))
@@ -812,6 +826,18 @@ const Account = ({ user }) => {
           }}
           reporterId={user.uid}
           reportedUser={selectedFriend}
+        />
+      )}
+
+      {/* Friend Chat Modal */}
+      {showChatModal && chatFriend && (
+        <FriendChat
+          currentUserId={user.uid}
+          friend={chatFriend}
+          onClose={() => {
+            setShowChatModal(false);
+            setChatFriend(null);
+          }}
         />
       )}
 

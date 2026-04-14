@@ -191,17 +191,27 @@ const MultiplayerGame = ({ user }) => {
     return () => unsubscribe();
   }, [roomId, navigate]);
 
-  // Start countdown only once
+  // Auto-navigate back to room if status is not playing (FIXED)
+  useEffect(() => {
+    if (!room) return;
+    if (room.status !== "playing") {
+      navigate(`/multiplayer/room/${roomId}`);
+    }
+  }, [room, roomId, navigate]);
+
+  // Start countdown only once - FIXED to work for ALL players
   useEffect(() => {
     if (!room || room.status !== "playing") return;
     if (raceFinished) return;
     if (gameStarted) return;
+    if (showCountdown) return;
+    if (isActive) return;
 
-    if (players.length > 0 && !showCountdown && !isActive && !raceFinished) {
+    if (players.length > 0) {
       startCountdown();
       setGameStarted(true);
     }
-  }, [room, players, raceFinished, gameStarted]);
+  }, [room, players, raceFinished, gameStarted, showCountdown, isActive]);
 
   // Focus input when game starts
   useEffect(() => {
@@ -462,11 +472,26 @@ const MultiplayerGame = ({ user }) => {
     }
   };
 
-  // Get car icon based on level
-  const getCarIcon = (level) => {
-    const carLevel = Math.ceil(level / 3);
-    const carIcons = ["🚗", "🏎️", "🏁", "⚡", "💫", "👑", "🌟"];
-    return carIcons[Math.min(carLevel - 1, 6)];
+  // Get car based on player position (FIXED - using cars 5,8,9,10)
+  const getCarForPosition = (position) => {
+    const carMap = {
+      1: "car-5",
+      2: "car-8",
+      3: "car-9",
+      4: "car-10",
+    };
+    return carMap[position] || "car-5";
+  };
+
+  // Get car icon based on position
+  const getCarIconForPosition = (position) => {
+    const iconMap = {
+      1: "🚗",
+      2: "🏎️",
+      3: "🏁",
+      4: "⚡",
+    };
+    return iconMap[position] || "🚗";
   };
 
   // Render target text with colored characters
@@ -499,13 +524,13 @@ const MultiplayerGame = ({ user }) => {
 
   const progress = (inputText.length / targetText.length) * 100;
   const currentPlayer = players.find((p) => p.id === user.uid);
-  const carIcon = getCarIcon(room?.level || 1);
 
   const racingPlayers = players.map((player) => ({
     id: player.id,
     name: player.id === user.uid ? "YOU" : player.name,
     progress: player.progress || 0,
-    carType: `car${Math.min(Math.ceil((room?.level || 1) / 3) * 3, 24)}`,
+    carType: getCarForPosition(player.position),
+    carImage: `/src/assets/cars/${getCarForPosition(player.position)}.png`,
     color: getCarColor(player.position),
     boost: player.wpm > 40 && player.accuracy > 95,
     position: player.position,
@@ -517,7 +542,9 @@ const MultiplayerGame = ({ user }) => {
         {/* Top Bar */}
         <div className="top-bar">
           <div className="level-display">
-            <span className="car-icon">{carIcon}</span>
+            <span className="car-icon">
+              {getCarIconForPosition(currentPlayer?.position || 1)}
+            </span>
             LEVEL {room?.level}
           </div>
           <div className="stats-display">
@@ -578,7 +605,7 @@ const MultiplayerGame = ({ user }) => {
         {/* Bottom Bar */}
         <div className="player-bar">
           {players.map((player) => {
-            const playerCarIcon = getCarIcon(room?.level || 1);
+            const playerCarIcon = getCarIconForPosition(player.position);
             return (
               <div
                 key={player.id}

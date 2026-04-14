@@ -1,4 +1,4 @@
-// Home.js - Landing page with hero section, features, and call to action (WITH FLOATING LETTERS ONLY)
+// Home.js - Landing page with hero section, features, and call to action
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { database } from "../firebase";
@@ -17,7 +17,7 @@ const Home = ({ user }) => {
 
   const fullTagline = "Shift Gears. Type Fast. Own the Track.";
 
-  // Generate random floating letters - INCREASED to 60 for full coverage
+  // Generate random floating letters
   useEffect(() => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const colors = [
@@ -31,15 +31,9 @@ const Home = ({ user }) => {
       "#e17055",
       "#74b9ff",
       "#a29bfe",
-      "#ff9ff3",
-      "#feca57",
-      "#48dbfb",
-      "#ff6b6b",
-      "#5f27cd",
     ];
     const newLetters = [];
 
-    // Increased from 30 to 60 letters for full coverage
     for (let i = 0; i < 60; i++) {
       newLetters.push({
         id: i,
@@ -55,11 +49,10 @@ const Home = ({ user }) => {
     setFloatingLetters(newLetters);
   }, []);
 
-  // Fetch user's display name from Firebase for personalized welcome
+  // Fetch user's display name
   useEffect(() => {
     const fetchDisplayName = async () => {
       if (!user) return;
-
       try {
         const userRef = ref(database, `users/${user.uid}/displayName`);
         const snapshot = await get(userRef);
@@ -73,11 +66,10 @@ const Home = ({ user }) => {
         setDisplayName(user.email?.split("@")[0] || "Player");
       }
     };
-
     fetchDisplayName();
   }, [user]);
 
-  // Typewriter effect for tagline
+  // Typewriter effect
   useEffect(() => {
     let index = 0;
     const timer = setInterval(() => {
@@ -89,11 +81,10 @@ const Home = ({ user }) => {
         clearInterval(timer);
       }
     }, 50);
-
     return () => clearInterval(timer);
   }, []);
 
-  // Scroll-triggered fade-in animation
+  // Scroll-triggered fade-in
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -109,13 +100,10 @@ const Home = ({ user }) => {
     featuresRef.current.forEach((card) => {
       if (card) observer.observe(card);
     });
-
     if (ctaRef.current) observer.observe(ctaRef.current);
-
     return () => observer.disconnect();
   }, []);
 
-  // Main Render
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -146,7 +134,7 @@ const Home = ({ user }) => {
           <div className="hero-logo-container"></div>
 
           {user && (
-            <div className="welcome-message fade-in">
+            <div className="welcome-message">
               <span className="welcome-text">Welcome back,</span>
               <span className="welcome-name">{displayName}</span>
             </div>
@@ -154,7 +142,6 @@ const Home = ({ user }) => {
 
           <h1 className="hero-title">GEARUP TYPING</h1>
 
-          {/* Typewriter Tagline */}
           <div className="tagline-container">
             <p className="hero-tagline">
               {typedText}
@@ -176,8 +163,20 @@ const Home = ({ user }) => {
         </div>
       </div>
 
-      {/* Features Section - Reduced spacing */}
+      {/* Features Section - WITH FLOATING DOTS */}
       <div className="features-section">
+        {/* FLOATING GLOWING DOTS - ADD THESE */}
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+
         <h2 className="section-title">DOMINATE THE RACE</h2>
         <div className="features-grid">
           <div
@@ -228,24 +227,20 @@ const Home = ({ user }) => {
         </div>
       </div>
 
-      {/* Preview Section - Fixed to be visible */}
-      <div className="preview-section fade-up">
-        <h2 className="section-title">IN ACTION</h2>
-        <div className="preview-container">
-          <div className="preview-image">
-            <div className="preview-overlay">
-              <div className="preview-placeholder">
-                <span className="preview-icon">🎬</span>
-                <span className="preview-text">GAMEPLAY PREVIEW</span>
-                <span className="preview-subtext">Coming Soon</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section - Reduced spacing */}
+      {/* CTA Section - WITH FLOATING DOTS */}
       <div className="cta-section fade-up" ref={ctaRef}>
+        {/* FLOATING GLOWING DOTS - ADD THESE */}
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+
         <h2>READY TO DOMINATE?</h2>
         <p>Join thousands of racers pushing their limits.</p>
         <button className="cta-button" onClick={() => navigate("/levels")}>

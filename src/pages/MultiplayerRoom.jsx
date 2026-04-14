@@ -313,7 +313,7 @@ const MultiplayerRoom = ({ user }) => {
     setPlayerReady(newReadyState);
   };
 
-  // Start game (host only) - spectators don't count
+  // START GAME - FIXED for all players
   const startGame = async () => {
     if (!isHost) return;
 
@@ -330,10 +330,13 @@ const MultiplayerRoom = ({ user }) => {
       return;
     }
 
+    // Update room status to playing and set race start time
     await update(ref(database), {
       [`multiplayer/rooms/${roomId}/status`]: "playing",
+      [`multiplayer/rooms/${roomId}/raceStartTime`]: Date.now(),
     });
 
+    // Navigate host to game
     navigate(`/multiplayer/game/${roomId}`);
   };
 

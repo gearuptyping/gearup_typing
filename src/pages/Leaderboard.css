@@ -5,6 +5,80 @@
   background: #41588a;
   color: white;
   padding: 2rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Gradient Circle Pattern Background */
+.leaderboard-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(
+      circle at 25% 40%,
+      rgba(255, 255, 255, 0.18) 0px,
+      rgba(255, 255, 255, 0.18) 3px,
+      transparent 4px,
+      transparent 50px
+    ),
+    radial-gradient(
+      circle at 75% 60%,
+      rgba(255, 255, 255, 0.15) 0px,
+      rgba(255, 255, 255, 0.15) 2px,
+      transparent 3px,
+      transparent 40px
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(255, 255, 255, 0.18) 0px,
+      rgba(255, 255, 255, 0.18) 2px,
+      transparent 3px,
+      transparent 35px
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(255, 255, 255, 0.15) 0px,
+      rgba(255, 255, 255, 0.15) 2px,
+      transparent 3px,
+      transparent 45px
+    ),
+    radial-gradient(
+      circle at 10% 70%,
+      rgba(255, 255, 255, 0.18) 0px,
+      rgba(255, 255, 255, 0.18) 2px,
+      transparent 3px,
+      transparent 35px
+    );
+  background-size: 150px 150px;
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 0;
+  animation: subtlePulse 4s ease-in-out infinite;
+}
+
+/* Subtle Pulse Animation */
+@keyframes subtlePulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Make sure content stays above background */
+.leaderboard-header,
+.view-toggle,
+.your-rank-card,
+.leaderboard-list,
+.last-reset-info {
+  position: relative;
+  z-index: 1;
 }
 
 /* Header Section */
@@ -15,6 +89,7 @@
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
 }
 
 .header-left h1 {
@@ -87,6 +162,7 @@
   padding: 5px;
   border-radius: 40px;
   max-width: 300px;
+  position: relative;
 }
 
 .toggle-btn {
@@ -134,6 +210,7 @@
   grid-template-columns: auto auto 1fr;
   align-items: center;
   gap: 2rem;
+  position: relative;
 }
 
 .rank-info,
@@ -198,6 +275,7 @@
   border-radius: 15px;
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
 }
 
 .list-header {
@@ -316,6 +394,7 @@
   display: flex;
   justify-content: center;
   gap: 20px;
+  position: relative;
 }
 
 /* Player Modal */
@@ -521,8 +600,14 @@
   }
 }
 
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
+  .leaderboard-container::before {
+    animation: none;
+  }
+
   .refresh-btn,
   .toggle-btn,
   .list-item,
@@ -547,7 +632,7 @@
   }
 }
 
-/* Tablet Responsive */
+/* Tablet (1024px and below) */
 @media (max-width: 1024px) {
   .your-rank-card {
     grid-template-columns: 1fr 1fr;
@@ -558,9 +643,13 @@
     grid-column: span 2;
     max-width: 100%;
   }
+
+  .leaderboard-container::before {
+    background-size: 120px 120px;
+  }
 }
 
-/* Mobile Responsive */
+/* Mobile (768px and below) */
 @media (max-width: 768px) {
   .leaderboard-container {
     padding: 1rem;
@@ -634,9 +723,29 @@
   .score-info {
     align-items: center;
   }
+
+  .leaderboard-container::before {
+    background-size: 100px 100px;
+  }
 }
 
-/* Small Mobile */
+/* Small Mobile (576px and below) */
+@media (max-width: 576px) {
+  .leaderboard-container::before {
+    background-size: 80px 80px;
+  }
+
+  .view-toggle {
+    max-width: 100%;
+  }
+
+  .toggle-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile Small (480px and below) */
 @media (max-width: 480px) {
   .leaderboard-container {
     padding: 0.8rem;
@@ -649,10 +758,6 @@
 
   .header-subtitle {
     font-size: 0.85rem;
-  }
-
-  .view-toggle {
-    max-width: 100%;
   }
 
   .toggle-btn {
@@ -690,9 +795,13 @@
     height: 60px;
     font-size: 1.5rem;
   }
+
+  .leaderboard-container::before {
+    background-size: 70px 70px;
+  }
 }
 
-/* Very Small Mobile */
+/* Very Small Mobile (380px and below) */
 @media (max-width: 380px) {
   .leaderboard-container {
     padding: 0.5rem;
@@ -747,5 +856,9 @@
   .col-level,
   .col-score {
     font-size: 0.8rem;
+  }
+
+  .leaderboard-container::before {
+    background-size: 60px 60px;
   }
 }

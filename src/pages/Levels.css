@@ -1,11 +1,51 @@
 /* Levels.css - Styles for level selection page with 24 levels + coming soon */
 
-/* Main Container */
+/* Main Container - WITH SPEED LINES BACKGROUND */
 .levels-container {
   min-height: 100vh;
   background: #41588a;
   color: #ffffff;
   padding: 2rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Speed Lines Background */
+.levels-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 30px,
+    rgba(255, 255, 255, 0.4) 30px,
+    rgba(255, 255, 255, 0.04) 32px,
+    transparent 32px,
+    transparent 60px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Additional subtle gradient overlay */
+.levels-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Loading State */
@@ -40,6 +80,7 @@
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
+  z-index: 1;
 }
 
 .levels-header h1 {
@@ -70,6 +111,8 @@
   justify-content: center;
   margin-bottom: 4rem;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
 
 .practice-btn,
@@ -131,9 +174,11 @@
   gap: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
-/* Level Card Base */
+/* Level Card Base - SAME SIZE FOR ALL */
 .level-card {
   background: rgba(65, 88, 138, 0.2);
   backdrop-filter: blur(10px);
@@ -146,7 +191,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  min-height: 180px;
+  min-height: 200px;
 }
 
 /* Unlocked Level Card */
@@ -177,25 +222,29 @@
   color: #ffaa00;
 }
 
-/* Coming Soon Card */
+/* Coming Soon Card - SAME SIZE AS LEVEL CARDS */
 .level-card.coming-soon {
   background: rgba(65, 88, 138, 0.15);
   border: 2px dashed rgba(255, 255, 255, 0.3);
   cursor: default;
-  opacity: 0.7;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  min-height: 200px;
+  padding: 1.5rem;
 }
 
 .coming-soon-icon {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
   opacity: 0.8;
 }
 
 .coming-soon-text {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: bold;
   letter-spacing: 2px;
   margin: 0.5rem 0;
@@ -203,7 +252,7 @@
 
 .coming-soon-message {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-style: italic;
 }
 
@@ -287,13 +336,72 @@
   border: 1px solid rgba(255, 170, 0, 0.2);
 }
 
+/* Admin Info Banner */
+.admin-info-banner {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid gold;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: gold;
+  font-weight: bold;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-icon {
+  font-size: 1.2rem;
+  animation: adminGlow 2s ease-in-out infinite;
+}
+
+@keyframes adminGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px gold;
+  }
+  50% {
+    text-shadow: 0 0 15px gold;
+  }
+}
+
+/* Max Level Badge */
+.max-level-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.3rem;
+  animation: trophyGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes trophyGlow {
+  0%,
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 5px gold;
+  }
+  50% {
+    transform: scale(1.1);
+    text-shadow: 0 0 15px gold;
+  }
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .loading-spinner,
   .practice-btn,
   .multiplayer-btn,
   .level-card,
-  .select-level-btn {
+  .select-level-btn,
+  .admin-icon,
+  .max-level-badge {
     animation: none;
     transition: none;
   }
@@ -308,9 +416,15 @@
   .loading-spinner {
     border-top-color: rgba(65, 88, 138, 0.3);
   }
+
+  .levels-container::before {
+    background-image: none;
+  }
 }
 
-/* Tablet Responsive */
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet (768px and below) */
 @media (max-width: 768px) {
   .levels-container {
     padding: 1rem;
@@ -336,25 +450,40 @@
 
   .levels-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
-  .level-card {
-    min-height: 160px;
+  .level-card,
+  .level-card.coming-soon {
+    min-height: 170px;
   }
 
   .level-number {
     font-size: 1.2rem;
   }
+
+  /* Adjust speed lines for tablet */
+  .levels-container::before {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 25px,
+      rgba(255, 255, 255, 0.04) 25px,
+      rgba(255, 255, 255, 0.04) 27px,
+      transparent 27px,
+      transparent 50px
+    );
+  }
 }
 
-/* Small Mobile */
-@media (max-width: 480px) {
+/* Mobile Large (576px and below) */
+@media (max-width: 576px) {
   .levels-container {
     padding: 0.8rem;
   }
 
   .levels-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     letter-spacing: 3px;
   }
 
@@ -363,13 +492,11 @@
   }
 
   .header-line {
-    width: 100px;
+    width: 80px;
   }
 
   .practice-btn,
   .multiplayer-btn {
-    min-width: auto;
-    width: 100%;
     max-width: 280px;
     padding: 0.8rem;
     min-height: 120px;
@@ -385,18 +512,14 @@
     font-size: 1.2rem;
   }
 
-  .practice-desc,
-  .multi-desc {
-    font-size: 0.8rem;
-  }
-
-  .level-card {
+  .level-card,
+  .level-card.coming-soon {
+    min-height: 160px;
     padding: 1rem;
-    min-height: 140px;
   }
 
   .level-number {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .stat {
@@ -405,21 +528,6 @@
 
   .stat-value {
     font-size: 0.9rem;
-  }
-
-  .select-level-btn {
-    padding: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  .locked-message {
-    font-size: 0.7rem;
-  }
-
-  .lock-icon {
-    font-size: 1rem;
-    top: 0.5rem;
-    right: 0.5rem;
   }
 
   .coming-soon-icon {
@@ -433,25 +541,56 @@
   .coming-soon-message {
     font-size: 0.7rem;
   }
+
+  .admin-info-banner {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+  }
+
+  .levels-container::before {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 20px,
+      rgba(255, 255, 255, 0.03) 20px,
+      rgba(255, 255, 255, 0.03) 22px,
+      transparent 22px,
+      transparent 40px
+    );
+  }
 }
 
-/* Very Small Mobile */
-@media (max-width: 380px) {
+/* Mobile Small (480px and below) */
+@media (max-width: 480px) {
+  .levels-container {
+    padding: 0.8rem;
+  }
+
   .levels-header h1 {
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+  }
+
+  .header-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .header-line {
+    width: 60px;
   }
 
   .practice-btn,
   .multiplayer-btn {
-    max-width: 240px;
-    padding: 0.6rem;
+    min-width: auto;
+    width: 100%;
+    max-width: 250px;
+    padding: 0.7rem;
     min-height: 100px;
   }
 
   .practice-icon,
   .multi-icon {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 
   .practice-text,
@@ -459,8 +598,19 @@
     font-size: 1rem;
   }
 
-  .level-stats {
-    gap: 0.5rem;
+  .practice-desc,
+  .multi-desc {
+    font-size: 0.7rem;
+  }
+
+  .level-card,
+  .level-card.coming-soon {
+    padding: 0.8rem;
+    min-height: 150px;
+  }
+
+  .level-number {
+    font-size: 1rem;
   }
 
   .stat {
@@ -475,11 +625,89 @@
     font-size: 0.8rem;
   }
 
+  .select-level-btn {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .locked-message {
+    font-size: 0.65rem;
+  }
+
+  .lock-icon {
+    font-size: 0.9rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .coming-soon-icon {
+    font-size: 1.8rem;
+  }
+
+  .coming-soon-text {
+    font-size: 0.8rem;
+  }
+
+  .coming-soon-message {
+    font-size: 0.6rem;
+  }
+
+  .admin-info-banner {
+    font-size: 0.7rem;
+    padding: 0.6rem;
+  }
+}
+
+/* Very Small Mobile (380px and below) */
+@media (max-width: 380px) {
+  .levels-header h1 {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+
+  .practice-btn,
+  .multiplayer-btn {
+    max-width: 220px;
+    padding: 0.6rem;
+    min-height: 90px;
+  }
+
+  .practice-icon,
+  .multi-icon {
+    font-size: 1.5rem;
+  }
+
+  .practice-text,
+  .multi-text {
+    font-size: 0.9rem;
+  }
+
+  .level-stats {
+    gap: 0.5rem;
+  }
+
+  .stat {
+    padding: 0.3rem;
+  }
+
+  .stat-label {
+    font-size: 0.55rem;
+  }
+
+  .stat-value {
+    font-size: 0.7rem;
+  }
+
+  .level-card,
+  .level-card.coming-soon {
+    min-height: 140px;
+  }
+
   .coming-soon-icon {
     font-size: 1.5rem;
   }
 
   .coming-soon-text {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 }

@@ -1,5 +1,5 @@
 // Login.js - Login page for user authentication with Firebase
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "../firebase";
 import "./AuthPages.css";
@@ -10,8 +10,41 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [floatingLetters, setFloatingLetters] = useState([]);
 
   const navigate = useNavigate();
+
+  // Generate random floating letters
+  useEffect(() => {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const colors = [
+      "#ff6b6b",
+      "#4ecdc4",
+      "#45b7d1",
+      "#96ceb4",
+      "#ffeaa7",
+      "#dfe6e9",
+      "#fdcb6e",
+      "#e17055",
+      "#74b9ff",
+      "#a29bfe",
+    ];
+    const newLetters = [];
+
+    for (let i = 0; i < 50; i++) {
+      newLetters.push({
+        id: i,
+        letter: letters[Math.floor(Math.random() * letters.length)],
+        color: colors[Math.floor(Math.random() * colors.length)],
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        size: 15 + Math.random() * 30,
+        duration: 8 + Math.random() * 12,
+        delay: Math.random() * 5,
+      });
+    }
+    setFloatingLetters(newLetters);
+  }, []);
 
   // Handle form submission - authenticate user with Firebase
   const handleSubmit = async (e) => {
@@ -49,6 +82,26 @@ const Login = () => {
   // Main Render
   return (
     <div className="auth-container">
+      {/* Floating Keyboard Letters */}
+      <div className="floating-letters-auth">
+        {floatingLetters.map((item) => (
+          <div
+            key={item.id}
+            className="floating-letter-auth"
+            style={{
+              left: `${item.left}%`,
+              top: `${item.top}%`,
+              color: item.color,
+              fontSize: `${item.size}px`,
+              animationDuration: `${item.duration}s`,
+              animationDelay: `${item.delay}s`,
+            }}
+          >
+            {item.letter}
+          </div>
+        ))}
+      </div>
+
       <div className="auth-card">
         <h2>Welcome Back to GearUp Typing</h2>
         <p className="auth-tagline">Ready to race?</p>
