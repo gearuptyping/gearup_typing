@@ -1,7 +1,7 @@
-// MessageBadge.js - Shows number of unread messages in navbar
+// MessageBadge.js - Shows number of unread private messages from friends in navbar
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUnreadCount } from "../services/messaging";
+import { getTotalUnreadFriendMessages } from "../services/chatService";
 import "./MessageBadge.css";
 
 const MessageBadge = ({ userId }) => {
@@ -9,11 +9,11 @@ const MessageBadge = ({ userId }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Listen for unread message count
+  // Listen for unread message count from private friend chat
   useEffect(() => {
     if (!userId) return;
 
-    const unsubscribe = getUnreadCount(userId, (count) => {
+    const unsubscribe = getTotalUnreadFriendMessages(userId, (count) => {
       setUnreadCount(count);
       setLoading(false);
     });
@@ -21,9 +21,9 @@ const MessageBadge = ({ userId }) => {
     return () => unsubscribe();
   }, [userId]);
 
-  // Handle click - navigate to messages page
+  // Handle click - navigate to Account page (where friend chat is)
   const handleClick = () => {
-    navigate("/messages");
+    navigate("/account");
   };
 
   // Don't show anything if no unread messages

@@ -23,7 +23,7 @@ import bronzeImg from "../assets/cars/bronze.png";
 
 import "./Garage.css";
 
-const Garage = ({ userId }) => {
+const Garage = ({ userId, userLevel }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [carData, setCarData] = useState({
@@ -73,6 +73,26 @@ const Garage = ({ userId }) => {
           return car1Img;
       }
     }
+  };
+
+  // Get car icon based on car ID
+  const getCarIcon = (carId) => {
+    const icons = {
+      car1: "🚗",
+      car2: "🏎️",
+      car3: "🏁",
+      car4: "⚡",
+      car5: "💫",
+      car6: "👑",
+      car7: "🌟",
+      car8: "🔥",
+      car9: "💎",
+      car10: "🏆",
+      golden: "👑",
+      silver: "🥈",
+      bronze: "🥉",
+    };
+    return icons[carId] || "🚗";
   };
 
   // Load garage data on mount
@@ -160,7 +180,8 @@ const Garage = ({ userId }) => {
         <span className="garage-icon">🏎️</span>
         <h3>GARAGE</h3>
         <span className="garage-badge">
-          {carData.regularCars.filter((c) => c.unlocked).length}/10
+          {carData.regularCars.filter((c) => c.unlocked).length}/
+          {carData.regularCars.length}
         </span>
         <span className={`garage-toggle ${isExpanded ? "expanded" : ""}`}>
           {isExpanded ? "▼" : "▶"}
@@ -173,20 +194,33 @@ const Garage = ({ userId }) => {
           {/* CURRENT SPECIAL CAR SECTION */}
           {carData.specialCar && (
             <div className="special-car-section">
-              <h4>CURRENT SPECIAL CAR</h4>
+              <h4>⭐ CURRENT SPECIAL CAR ⭐</h4>
               <div
                 className="special-car-card"
                 style={{
-                  borderColor: carData.specialCar.color,
-                  boxShadow: `0 0 20px ${carData.specialCar.glowColor}`,
+                  borderColor:
+                    carData.specialCar.id === "golden"
+                      ? "#FFD700"
+                      : carData.specialCar.id === "silver"
+                        ? "#C0C0C0"
+                        : "#CD7F32",
+                  boxShadow: `0 0 20px ${
+                    carData.specialCar.id === "golden"
+                      ? "rgba(255,215,0,0.5)"
+                      : carData.specialCar.id === "silver"
+                        ? "rgba(192,192,192,0.5)"
+                        : "rgba(205,127,50,0.5)"
+                  }`,
                 }}
-                onClick={() => handleCarClick(carData.specialCar)}
+                onClick={() =>
+                  handleCarClick({ ...carData.specialCar, isSpecial: true })
+                }
               >
                 <div className="special-car-icon">
                   <img
                     src={getCarImage(carData.specialCar.id, true)}
                     alt={carData.specialCar.displayName}
-                    className="car-image-small"
+                    className="car-image-special"
                   />
                 </div>
                 <div className="special-car-info">
@@ -214,10 +248,12 @@ const Garage = ({ userId }) => {
                 <div
                   key={car.id}
                   className={`car-grid-item ${car.unlocked ? "unlocked" : "locked"}`}
-                  onClick={() => car.unlocked && handleCarClick(car)}
+                  onClick={() =>
+                    car.unlocked && handleCarClick({ ...car, isSpecial: false })
+                  }
                   style={{
                     borderColor: car.unlocked
-                      ? car.color || "#41588a"
+                      ? "#41588a"
                       : "rgba(255,255,255,0.2)",
                     opacity: car.unlocked ? 1 : 0.5,
                   }}
@@ -231,6 +267,7 @@ const Garage = ({ userId }) => {
                   </div>
                   <div className="car-grid-name">{car.displayName}</div>
                   <div className="car-grid-level">Lvl {car.levelRequired}</div>
+                  <div className="car-grid-icon">{getCarIcon(car.id)}</div>
                   {!car.unlocked && <div className="car-grid-lock">🔒</div>}
                 </div>
               ))}
@@ -240,7 +277,7 @@ const Garage = ({ userId }) => {
           {/* PAST ACHIEVEMENTS SECTION */}
           {weeklyHistory.length > 0 && (
             <div className="achievements-section">
-              <h4>PAST ACHIEVEMENTS</h4>
+              <h4>🏆 PAST ACHIEVEMENTS 🏆</h4>
               <div className="achievements-list">
                 {weeklyHistory.map((achievement, index) => (
                   <div key={index} className="achievement-item">
@@ -294,7 +331,12 @@ const Garage = ({ userId }) => {
                   className="car-image-large"
                 />
               </div>
-              <h2>{selectedCar.displayName}</h2>
+              <h2>
+                {selectedCar.displayName}
+                <span className="car-detail-icon">
+                  {getCarIcon(selectedCar.id)}
+                </span>
+              </h2>
             </div>
 
             <div className="car-detail-body">
@@ -307,8 +349,15 @@ const Garage = ({ userId }) => {
                     {selectedCar.rank === 3 && "🥉 Weekly Top 3"}
                   </div>
                   <p className="car-detail-description">
-                    {selectedCar.description || "Weekly top 3 award car"}
+                    {selectedCar.description ||
+                      "Weekly top 3 award car - Exclusive limited edition!"}
                   </p>
+                  <div className="car-detail-color">
+                    <strong>Color:</strong>{" "}
+                    {selectedCar.id === "golden" && "✨ Golden ✨"}
+                    {selectedCar.id === "silver" && "⚪ Silver ⚪"}
+                    {selectedCar.id === "bronze" && "🟤 Bronze 🟤"}
+                  </div>
                   {selectedCar.expiresAt && (
                     <div className="car-detail-expiry">
                       <strong>Expires:</strong>{" "}
@@ -336,7 +385,9 @@ const Garage = ({ userId }) => {
                     {selectedCar.unlocked ? (
                       <span className="status-unlocked">✅ Unlocked</span>
                     ) : (
-                      <span className="status-locked">🔒 Locked</span>
+                      <span className="status-locked">
+                        🔒 Locked (Reach Level {selectedCar.levelRequired})
+                      </span>
                     )}
                   </div>
                   {selectedCar.unlocked && selectedCar.unlockedAt && (

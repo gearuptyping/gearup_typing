@@ -80,12 +80,12 @@
 
 /* Section Headers */
 .garage-content h4 {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
   letter-spacing: 1px;
   margin-bottom: 15px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Special Car Section */
@@ -97,7 +97,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
   border: 2px solid;
   border-radius: 15px;
   padding: 20px;
@@ -108,7 +108,6 @@
 
 .special-car-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 25px currentColor;
 }
 
 .special-car-card:active {
@@ -123,7 +122,13 @@
   width: 80px;
   height: 80px;
   background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  border-radius: 12px;
+}
+
+.car-image-special {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
 }
 
 .special-car-info {
@@ -132,21 +137,32 @@
 
 .special-car-name {
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
 .special-car-rank {
-  color: gold;
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin-bottom: 8px;
   font-weight: 600;
 }
 
+.special-car-rank:has(.rank-gold) {
+  color: #ffd700;
+}
+
+.special-car-rank:has(.rank-silver) {
+  color: #c0c0c0;
+}
+
+.special-car-rank:has(.rank-bronze) {
+  color: #cd7f32;
+}
+
 .special-car-timer {
   color: #ff6b6b;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -189,7 +205,6 @@
 
 .car-grid-item.locked {
   cursor: not-allowed;
-  filter: grayscale(0.7);
 }
 
 /* Car Grid Image Styles */
@@ -210,7 +225,7 @@
 
 .car-image-grid.grayscale {
   filter: grayscale(100%);
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .car-grid-item.unlocked:hover .car-image-grid {
@@ -219,14 +234,20 @@
 
 .car-grid-name {
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 4px;
 }
 
+.car-grid-icon {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
 .car-grid-level {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .car-grid-lock {
@@ -246,6 +267,23 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.achievements-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.achievements-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.achievements-list::-webkit-scrollbar-thumb {
+  background: #41588a;
+  border-radius: 3px;
 }
 
 .achievement-item {
@@ -253,15 +291,21 @@
   align-items: center;
   gap: 15px;
   padding: 10px 15px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.achievement-item:hover {
+  background: rgba(65, 88, 138, 0.2);
+  transform: translateX(3px);
 }
 
 .achievement-rank {
   font-size: 1.2rem;
-  min-width: 30px;
+  min-width: 35px;
 }
 
 .achievement-week {
@@ -272,29 +316,29 @@
 .achievement-score {
   color: #44ff44;
   font-weight: 600;
-  min-width: 80px;
+  min-width: 70px;
 }
 
 .achievement-date {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.8rem;
-  min-width: 100px;
+  font-size: 0.75rem;
+  min-width: 90px;
 }
 
 /* Empty State */
 .garage-empty {
   text-align: center;
-  padding: 30px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 40px 20px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .garage-empty p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-bottom: 5px;
 }
 
 .garage-empty span {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   opacity: 0.5;
 }
 
@@ -328,7 +372,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
@@ -347,7 +391,7 @@
 }
 
 .car-detail-modal {
-  background: #1e2a3a;
+  background: linear-gradient(135deg, #1e2a3a, #15202b);
   border: 2px solid #41588a;
   border-radius: 20px;
   padding: 30px;
@@ -356,6 +400,7 @@
   position: relative;
   animation: slideUp 0.3s ease;
   text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes slideUp {
@@ -379,11 +424,18 @@
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.2s;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   -webkit-tap-highlight-color: transparent;
 }
 
 .close-btn:hover {
   color: white;
+  background: rgba(255, 255, 255, 0.1);
   transform: scale(1.1);
 }
 
@@ -407,8 +459,9 @@
   margin-bottom: 15px;
   width: 150px;
   height: 150px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .car-image-large {
@@ -419,8 +472,16 @@
 
 .car-detail-header h2 {
   color: white;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.car-detail-icon {
+  font-size: 1.3rem;
+  opacity: 0.8;
 }
 
 .car-detail-body {
@@ -429,20 +490,31 @@
 }
 
 .car-detail-rank {
-  color: gold;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   margin-bottom: 10px;
   text-align: center;
+  padding: 8px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .car-detail-description {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
   line-height: 1.5;
   margin-bottom: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.car-detail-color {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
 }
 
 .car-detail-expiry,
@@ -450,11 +522,11 @@
 .car-detail-status,
 .car-detail-date {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 0.95rem;
-  margin-bottom: 8px;
-  padding: 8px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
 }
 
 .car-detail-expiry strong,
@@ -470,14 +542,14 @@
 }
 
 .status-locked {
-  color: #ff4444;
+  color: #ff8888;
 }
 
 .close-bottom-btn {
-  background: #41588a;
+  background: linear-gradient(135deg, #41588a, #2d4a7a);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 12px 25px;
   font-size: 1rem;
   font-weight: 600;
@@ -488,7 +560,7 @@
 }
 
 .close-bottom-btn:hover {
-  background: #5a71a0;
+  background: linear-gradient(135deg, #5a71a0, #3d5a8a);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(65, 88, 138, 0.5);
 }
@@ -498,6 +570,12 @@
 }
 
 /* Mobile Responsive */
+@media (max-width: 1024px) {
+  .car-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .car-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -506,46 +584,55 @@
   .special-car-card {
     flex-direction: column;
     text-align: center;
+    padding: 15px;
+  }
+
+  .special-car-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .car-image-special {
+    width: 60px;
+    height: 60px;
+  }
+
+  .car-grid-name {
+    font-size: 0.75rem;
   }
 
   .achievement-item {
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 5px;
+    padding: 8px 12px;
   }
 
   .achievement-week {
     flex: 100%;
     order: -1;
+    font-size: 0.8rem;
   }
 
   .achievement-rank {
     order: 0;
+    font-size: 1rem;
   }
 
   .achievement-score {
     order: 1;
     min-width: auto;
+    font-size: 0.8rem;
   }
 
   .achievement-date {
     order: 2;
     min-width: auto;
+    font-size: 0.7rem;
   }
 
-  /* Mobile adjustments for car images */
   .car-image-grid {
     width: 50px;
     height: 25px;
-  }
-
-  .special-car-icon {
-    width: 60px;
-    height: 60px;
-  }
-
-  .car-image-small {
-    width: 50px;
-    height: 50px;
   }
 
   .car-detail-image {
@@ -557,10 +644,46 @@
     width: 100px;
     height: 100px;
   }
+
+  .car-detail-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .garage-badge {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+  }
 }
 
 /* Small Mobile */
+@media (max-width: 576px) {
+  .car-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .car-grid-item {
+    padding: 8px 4px;
+  }
+
+  .car-grid-name {
+    font-size: 0.7rem;
+  }
+
+  .car-grid-icon {
+    font-size: 0.7rem;
+  }
+
+  .car-grid-level {
+    font-size: 0.6rem;
+  }
+}
+
 @media (max-width: 480px) {
+  .garage-content {
+    padding: 15px;
+  }
+
   .car-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -570,11 +693,23 @@
     height: 60px;
   }
 
-  .special-car-name {
-    font-size: 1.2rem;
+  .car-image-special {
+    width: 50px;
+    height: 50px;
   }
 
-  /* Extra small screen adjustments */
+  .special-car-name {
+    font-size: 1.1rem;
+  }
+
+  .special-car-rank {
+    font-size: 0.8rem;
+  }
+
+  .special-car-timer {
+    font-size: 0.75rem;
+  }
+
   .car-image-grid {
     width: 45px;
     height: 22px;
@@ -589,6 +724,136 @@
     width: 80px;
     height: 80px;
   }
+
+  .car-detail-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .car-detail-description {
+    font-size: 0.85rem;
+  }
+
+  .car-detail-expiry,
+  .car-detail-level,
+  .car-detail-status,
+  .car-detail-date {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .garage-header {
+    padding: 12px 15px;
+  }
+
+  .garage-header h3 {
+    font-size: 1rem;
+  }
+
+  .garage-icon {
+    font-size: 1.2rem;
+  }
+
+  .garage-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .achievement-item {
+    padding: 6px 10px;
+  }
+
+  .achievement-week {
+    font-size: 0.7rem;
+  }
+
+  .achievement-score {
+    font-size: 0.7rem;
+  }
+
+  .achievement-date {
+    font-size: 0.6rem;
+  }
+}
+
+/* Very Small Mobile */
+@media (max-width: 375px) {
+  .car-grid {
+    gap: 6px;
+  }
+
+  .car-grid-name {
+    font-size: 0.65rem;
+  }
+
+  .car-grid-icon {
+    font-size: 0.6rem;
+  }
+
+  .special-car-card {
+    padding: 12px;
+  }
+
+  .special-car-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .car-image-special {
+    width: 40px;
+    height: 40px;
+  }
+
+  .special-car-name {
+    font-size: 1rem;
+  }
+
+  .car-detail-modal {
+    padding: 20px;
+  }
+
+  .car-detail-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .car-image-large {
+    width: 65px;
+    height: 65px;
+  }
+
+  .achievements-list {
+    max-height: 200px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 320px) {
+  .car-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+  }
+
+  .car-grid-name {
+    font-size: 0.6rem;
+  }
+
+  .garage-content {
+    padding: 10px;
+  }
+
+  .special-car-card {
+    padding: 10px;
+  }
+
+  .special-car-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .car-image-special {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 /* Reduced motion preference for accessibility */
@@ -600,7 +865,8 @@
   .car-detail-overlay,
   .car-detail-modal,
   .close-btn,
-  .close-bottom-btn {
+  .close-bottom-btn,
+  .achievement-item {
     animation: none;
     transition: none;
   }
@@ -611,5 +877,14 @@
   .close-btn:hover,
   .close-bottom-btn:hover {
     transform: none;
+  }
+
+  .loading-spinner-small {
+    animation: none;
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .garage-toggle {
+    transition: none;
   }
 }

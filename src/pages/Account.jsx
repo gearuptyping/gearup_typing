@@ -29,6 +29,7 @@ import {
   checkIfUserIsAdmin,
   getUsersAdminStatus,
 } from "../services/adminService";
+import { getTotalUnreadFriendMessages } from "../services/chatService";
 import "./Account.css";
 
 const Account = ({ user }) => {
@@ -82,6 +83,7 @@ const Account = ({ user }) => {
   // Chat States
   const [chatFriend, setChatFriend] = useState(null);
   const [showChatModal, setShowChatModal] = useState(false);
+  const [unreadCounts, setUnreadCounts] = useState({});
 
   // Three-dot menu state
   const [openMenuFor, setOpenMenuFor] = useState(null);
@@ -185,6 +187,33 @@ const Account = ({ user }) => {
     });
     return () => unsubscribe();
   }, [user]);
+
+  // Load unread message counts for each friend
+  useEffect(() => {
+    const loadUnreadCounts = async () => {
+      if (!friends.length) return;
+
+      const counts = {};
+      for (const friend of friends) {
+        // Simple way to get unread count per friend
+        // In a real implementation, you'd have a function to get unread count per conversation
+        const chatId = `chat_${[user.uid, friend.userId].sort().join("_")}`;
+        const unreadRef = ref(
+          database,
+          `friendChatsUsers/${user.uid}/${chatId}/unreadCount`,
+        );
+        const snapshot = await get(unreadRef);
+        counts[friend.userId] = snapshot.val() || 0;
+      }
+      setUnreadCounts(counts);
+    };
+
+    loadUnreadCounts();
+
+    // Set up interval to refresh unread counts
+    const interval = setInterval(loadUnreadCounts, 5000);
+    return () => clearInterval(interval);
+  }, [friends, user.uid]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -728,7 +757,7 @@ const Account = ({ user }) => {
             </div>
           )}
 
-          {/* Friends List with Three-Dot Menu */}
+          {/* Friends List with Three-Dot Menu and Unread Badges */}
           <div className="friends-list">
             {friends.length === 0 ? (
               <div className="no-friends">
@@ -745,6 +774,11 @@ const Account = ({ user }) => {
                       {friend.displayName}
                       {friendsAdminStatus[friend.userId] && <AdminBadge />}
                       <OnlineStatus userId={friend.userId} />
+                      {unreadCounts[friend.userId] > 0 && (
+                        <span className="unread-badge">
+                          {unreadCounts[friend.userId]}
+                        </span>
+                      )}
                     </span>
                     <span className="friend-added">
                       Added: {new Date(friend.addedAt).toLocaleDateString()}
@@ -782,6 +816,11 @@ const Account = ({ user }) => {
                           onClick={() => handleChatFriend(friend)}
                         >
                           💬 Chat
+                          {unreadCounts[friend.userId] > 0 && (
+                            <span className="menu-badge">
+                              {unreadCounts[friend.userId]}
+                            </span>
+                          )}
                         </button>
                         <button
                           className="menu-item block"

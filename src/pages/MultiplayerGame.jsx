@@ -1,4 +1,4 @@
-// MultiplayerGame.js - Multiplayer racing game with real players and weekly points (24 levels, NO badges)
+// MultiplayerGame.js - Multiplayer racing game with real players and weekly points
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { database } from "../firebase";
@@ -17,7 +17,6 @@ const MultiplayerGame = ({ user }) => {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [targetText, setTargetText] = useState("");
-  const [inputText, setInputText] = useState("");
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -27,107 +26,111 @@ const MultiplayerGame = ({ user }) => {
   const [displayName, setDisplayName] = useState("");
   const [raceFinished, setRaceFinished] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [inputText, setInputText] = useState("");
+  const [wpm, setWpm] = useState(0);
+  const [accuracy, setAccuracy] = useState(100);
+  const [correctChars, setCorrectChars] = useState(0);
 
   const inputRef = useRef(null);
   const timerRef = useRef(null);
   const countdownRef = useRef(null);
 
-  // 24 levels with progressive difficulty paragraphs (matching solo game)
+  // COMPLETE 24 levels with progressive difficulty paragraphs (FULL VERSION - matching solo game)
   const levelData = {
     1: {
-      text: "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.",
+      text: "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. The five boxing wizards jump quickly.",
       timeLimit: 60,
     },
     2: {
-      text: "A journey of a thousand miles begins with a single step. Slow and steady wins the race.",
+      text: "A journey of a thousand miles begins with a single step. Slow and steady wins the race. Practice makes perfect every single day.",
       timeLimit: 90,
     },
     3: {
-      text: "An apple a day keeps the doctor away. Early to bed and early to rise makes a man healthy.",
+      text: "An apple a day keeps the doctor away. Early to bed and early to rise makes a man healthy, wealthy, and wise. A penny for your thoughts.",
       timeLimit: 120,
     },
     4: {
-      text: "The sun rises in the east and sets in the west. The moon orbits around the Earth.",
+      text: "The sun rises in the east and sets in the west. The moon orbits around the Earth. Stars twinkle in the night sky above us all.",
       timeLimit: 150,
     },
     5: {
-      text: "Cats have nine lives, or so the old saying goes. Dogs are called man's best friend.",
+      text: "Cats have nine lives, or so the old saying goes. Dogs are called man's best friend for good reason. Fish live in water and breathe through gills.",
       timeLimit: 180,
     },
     6: {
-      text: "Honey never spoils. Archaeologists found edible honey in ancient Egyptian tombs.",
+      text: "Honey never spoils. Archaeologists found edible honey in ancient Egyptian tombs that was over three thousand years old. It remains the only food that lasts forever.",
       timeLimit: 198,
     },
     7: {
-      text: "Octopuses have three hearts and blue blood. Two hearts pump blood to the gills.",
+      text: "Octopuses have three hearts and blue blood. Two hearts pump blood to the gills while the third pumps it to the rest of the body. They are remarkably intelligent creatures.",
       timeLimit: 216,
     },
     8: {
-      text: "Bananas are technically berries, while strawberries are not. A berry has seeds inside.",
+      text: "Bananas are technically berries, while strawberries are not. Botanically speaking, a berry has seeds inside rather than outside. This surprises many people when they first learn it.",
       timeLimit: 234,
     },
     9: {
-      text: "A day on Venus is longer than its year. Venus takes 243 Earth days to rotate once.",
+      text: "A day on Venus is longer than its year. Venus takes two hundred forty-three Earth days to rotate once but only two hundred twenty-five days to orbit the sun. Time works differently there.",
       timeLimit: 252,
     },
     10: {
-      text: "Wombat poop is cube-shaped. This unique shape prevents it from rolling away.",
+      text: "Wombat poop is cube-shaped. This unique shape prevents it from rolling away, marking territory more effectively. Nature finds the most fascinating solutions to problems.",
       timeLimit: 270,
     },
     11: {
-      text: "The human nose can remember over fifty thousand different scents.",
+      text: "The human nose can remember over fifty thousand different scents. Dogs have noses even more powerful, with up to three hundred million scent receptors compared to our mere six million.",
       timeLimit: 288,
     },
     12: {
-      text: "Lightning strikes the Earth about one hundred times every second.",
+      text: "Lightning strikes the Earth about one hundred times every second. That's eight million times per day. Each bolt reaches temperatures hotter than the surface of the sun.",
       timeLimit: 306,
     },
     13: {
-      text: "Trees communicate through underground fungal networks called the Wood Wide Web.",
+      text: "Trees communicate with each other through underground fungal networks. They share nutrients and send warnings about pests and diseases. Scientists call this network the Wood Wide Web.",
       timeLimit: 324,
     },
     14: {
-      text: "The Great Wall of China is not visible from space with the naked eye.",
+      text: "The Great Wall of China is not visible from space with the naked eye, contrary to popular belief. Astronauts can see it only with magnification, just like many other human structures.",
       timeLimit: 342,
     },
     15: {
-      text: "The shortest war in history lasted only thirty-eight minutes in 1896.",
+      text: "The shortest war in history lasted only thirty-eight minutes. It occurred between Britain and Zanzibar in 1896. The Zanzibar forces surrendered after a brief bombardment.",
       timeLimit: 360,
     },
     16: {
-      text: "Cleopatra lived closer in time to the iPhone than to the pyramids.",
+      text: "Cleopatra lived closer in time to the invention of the iPhone than to the construction of the pyramids. The Great Pyramid was built around 2560 BCE, while Cleopatra lived around 30 BCE.",
       timeLimit: 378,
     },
     17: {
-      text: "Quantum entanglement connects particles across vast distances instantly.",
+      text: "The concept of quantum entanglement suggests that particles can remain connected across vast distances. When one particle changes, its entangled partner changes instantly regardless of separation.",
       timeLimit: 396,
     },
     18: {
-      text: "Black holes have gravity so strong that not even light can escape.",
+      text: "Black holes are regions where gravity is so strong that nothing, not even light, can escape. They form when massive stars collapse at the end of their life cycle.",
       timeLimit: 414,
     },
     19: {
-      text: "DNA stores information in a code made of four chemical bases.",
+      text: "DNA contains the instructions for building and maintaining living organisms. This molecule stores information in a code made of four chemical bases that pair together in specific combinations.",
       timeLimit: 432,
     },
     20: {
-      text: "Plate tectonics explains how continents drift across the planet.",
+      text: "Plate tectonics explains how Earth's outer shell is divided into plates that glide over the mantle. These plates move about as fast as fingernails grow, yet their collisions build mountains.",
       timeLimit: 450,
     },
     21: {
-      text: "It was a bright cold day in April, and the clocks were striking thirteen. - George Orwell",
+      text: "It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith slipped quickly through the glass doors of Victory Mansions. - George Orwell, Nineteen Eighty-Four",
       timeLimit: 468,
     },
     22: {
-      text: "It was a pleasure to burn. Fire was bright, and fire was clean. - Ray Bradbury",
+      text: "It was a pleasure to burn. It was a special pleasure to see things eaten, to see things blackened and changed. Fire was bright, and fire was clean. - Ray Bradbury, Fahrenheit 451",
       timeLimit: 486,
     },
     23: {
-      text: "In a hole in the ground there lived a hobbit. - J.R.R. Tolkien",
+      text: "In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole: it was a hobbit-hole, and that means comfort. - J.R.R. Tolkien, The Hobbit",
       timeLimit: 504,
     },
     24: {
-      text: "All children, except one, grow up. - J.M. Barrie",
+      text: "All children, except one, grow up. They soon know that they will grow up, and the way Wendy knew was this. One day when she was two years old she was playing in a garden. - J.M. Barrie, Peter Pan",
       timeLimit: 522,
     },
   };
@@ -200,23 +203,13 @@ const MultiplayerGame = ({ user }) => {
     if (!room) return;
     console.log("📢 Checking room status:", room.status);
 
-    // If room status becomes "playing", navigate ALL players to game
     if (room.status === "playing") {
       console.log("🏁 Race starting! Navigating to game...");
       navigate(`/multiplayer/game/${roomId}`);
     }
   }, [room?.status, roomId, navigate]);
 
-  // Auto-navigate back to room if status is not playing (for safety)
-  useEffect(() => {
-    if (!room) return;
-    if (room.status !== "playing" && !loading) {
-      console.log("📢 Room not playing, returning to room...");
-      navigate(`/multiplayer/room/${roomId}`);
-    }
-  }, [room?.status, roomId, navigate, loading]);
-
-  // Start countdown only once - FIXED to work for ALL players
+  // Start countdown only once for ALL players
   useEffect(() => {
     if (!room || room.status !== "playing") return;
     if (raceFinished) return;
@@ -236,35 +229,43 @@ const MultiplayerGame = ({ user }) => {
     if (isActive && inputRef.current) inputRef.current.focus();
   }, [isActive]);
 
-  // Timer logic
+  // FIXED: Timer logic - proper countdown
   useEffect(() => {
     if (isActive && timer > 0) {
-      timerRef.current = setTimeout(() => setTimer(timer - 1), 1000);
+      timerRef.current = setTimeout(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
     } else if (timer === 0 && isActive) {
-      finishGame();
+      // Time's up - player gets DNF (0 points)
+      finishGame(true);
     }
     return () => clearTimeout(timerRef.current);
   }, [isActive, timer]);
 
-  // Update YOUR progress in Firebase (real-time)
+  // Calculate WPM and accuracy in real-time
   useEffect(() => {
-    if (!isActive || !roomId || !user) return;
-
-    const progress = (inputText.length / targetText.length) * 100;
-    const elapsedSeconds = (levelData[room?.level]?.timeLimit || 60) - timer;
-    const minutes = elapsedSeconds > 0 ? elapsedSeconds / 60 : 0.0167;
-    const words = inputText.length / 5;
-    const currentWpm = minutes > 0 ? Math.floor(words / minutes) : 0;
+    if (!isActive || !targetText || inputText.length === 0) {
+      if (inputText.length === 0 && isActive) setAccuracy(100);
+      return;
+    }
 
     let correct = 0;
     for (let i = 0; i < inputText.length; i++) {
       if (i < targetText.length && inputText[i] === targetText[i]) correct++;
     }
-    const currentAccuracy =
-      inputText.length > 0
-        ? Math.floor((correct / inputText.length) * 100)
-        : 100;
 
+    setCorrectChars(correct);
+    const newAccuracy = Math.floor((correct / inputText.length) * 100);
+    setAccuracy(newAccuracy);
+
+    const elapsedSeconds = (levelData[room?.level]?.timeLimit || 60) - timer;
+    const minutes = elapsedSeconds > 0 ? elapsedSeconds / 60 : 0.0167;
+    const words = inputText.length / 5;
+    const currentWpm = minutes > 0 ? Math.floor(words / minutes) : 0;
+    setWpm(currentWpm);
+
+    // Update progress in Firebase
+    const progress = (inputText.length / targetText.length) * 100;
     const playerRef = ref(
       database,
       `multiplayer/rooms/${roomId}/playersData/${user.uid}`,
@@ -272,16 +273,16 @@ const MultiplayerGame = ({ user }) => {
     update(playerRef, {
       progress: progress,
       wpm: currentWpm,
-      accuracy: currentAccuracy,
+      accuracy: newAccuracy,
       inputLength: inputText.length,
     });
-  }, [inputText, isActive, roomId, user, targetText, timer, room]);
+  }, [inputText, isActive, targetText, timer, room, roomId, user.uid]);
 
-  // Check if YOU finished
+  // Check if player finished by completing the paragraph
   useEffect(() => {
     if (!isActive || !targetText) return;
     if (inputText.length >= targetText.length) {
-      finishGame();
+      finishGame(false);
     }
   }, [inputText, targetText, isActive]);
 
@@ -289,7 +290,7 @@ const MultiplayerGame = ({ user }) => {
   useEffect(() => {
     if (!players.length || !room) return;
 
-    const allFinished = players.every((p) => p.finished);
+    const allFinished = players.every((p) => p.finished === true);
     if (allFinished && players.length > 0 && !raceFinished) {
       calculateResults();
       setRaceFinished(true);
@@ -313,29 +314,38 @@ const MultiplayerGame = ({ user }) => {
           setShowCountdown(false);
           setIsActive(true);
           setInputText("");
+          setWpm(0);
+          setAccuracy(100);
+          setCorrectChars(0);
           if (inputRef.current) inputRef.current.focus();
         }, 800);
       }
     }, 1000);
   };
 
-  // Finish game function (called when you finish)
-  const finishGame = async () => {
+  // Finish game function (called when player finishes or times out)
+  const finishGame = async (isTimeout = false) => {
     setIsActive(false);
     setIsFinished(true);
     clearTimeout(timerRef.current);
 
     const elapsedSeconds = (levelData[room?.level]?.timeLimit || 60) - timer;
     const minutes = elapsedSeconds > 0 ? elapsedSeconds / 60 : 0.0167;
-    const finalWpm =
-      inputText.length > 0 ? Math.floor(inputText.length / 5 / minutes) : 0;
 
-    let correct = 0;
-    for (let i = 0; i < inputText.length; i++) {
-      if (i < targetText.length && inputText[i] === targetText[i]) correct++;
+    // If timeout, finalWpm and finalAccuracy are 0
+    const finalWpm =
+      !isTimeout && inputText.length > 0
+        ? Math.floor(inputText.length / 5 / minutes)
+        : 0;
+
+    let finalAccuracy = 0;
+    if (!isTimeout && inputText.length > 0) {
+      let correct = 0;
+      for (let i = 0; i < inputText.length; i++) {
+        if (i < targetText.length && inputText[i] === targetText[i]) correct++;
+      }
+      finalAccuracy = Math.floor((correct / inputText.length) * 100);
     }
-    const finalAccuracy =
-      inputText.length > 0 ? Math.floor((correct / inputText.length) * 100) : 0;
 
     const playerRef = ref(
       database,
@@ -345,41 +355,56 @@ const MultiplayerGame = ({ user }) => {
       finished: true,
       finalWpm: finalWpm,
       finalAccuracy: finalAccuracy,
-      finishTime: Date.now(),
+      finishTime: isTimeout ? null : Date.now(),
+      isTimeout: isTimeout,
     });
   };
 
-  // Calculate results when all players finish
+  // FIXED: Calculate results when all players finish - ONLY finishers get points
   const calculateResults = async () => {
-    const finishedPlayers = [...players].sort((a, b) => {
-      if (a.finished && !b.finished) return -1;
-      if (!a.finished && b.finished) return 1;
-      if (a.finishTime && b.finishTime) {
-        return a.finishTime - b.finishTime;
-      }
-      return b.progress - a.progress;
-    });
+    // Separate finishers and non-finishers
+    const finishers = players.filter(
+      (p) => p.finished && !p.isTimeout && p.finishTime,
+    );
+    const nonFinishers = players.filter((p) => !p.finished || p.isTimeout);
+
+    // Sort finishers by finish time (fastest first)
+    finishers.sort((a, b) => a.finishTime - b.finishTime);
+
+    // Combine: finishers first (ranked), then non-finishers (unranked)
+    const rankedPlayers = [...finishers, ...nonFinishers];
 
     const level = room?.level || 1;
     const points = getPointsForLevel(level);
 
-    const results = finishedPlayers.map((player, index) => {
+    const results = rankedPlayers.map((player, index) => {
       let pointsEarned = 0;
-      if (index === 0) pointsEarned = points.first;
-      else if (index === 1) pointsEarned = points.second;
-      else if (index === 2) pointsEarned = points.third;
-      else if (index === 3) pointsEarned = points.fourth;
-
+      let rank = null;
       let finishTimeFormatted = "DNF";
-      if (player.finishTime) {
+
+      // ONLY award points to finishers (players who completed the race on time)
+      if (player.finished && !player.isTimeout && player.finishTime) {
+        rank = finishers.findIndex((f) => f.id === player.id) + 1;
+
+        // Award points based on rank among finishers only
+        if (rank === 1) pointsEarned = points.first;
+        else if (rank === 2) pointsEarned = points.second;
+        else if (rank === 3) pointsEarned = points.third;
+        else if (rank === 4) pointsEarned = points.fourth;
+
+        // Calculate finish time
         const startTime = Date.now() - timer * 1000;
         const timeTaken = (player.finishTime - startTime) / 1000;
         finishTimeFormatted = formatTime(Math.max(0, timeTaken));
+      } else if (player.isTimeout) {
+        finishTimeFormatted = "TIMEOUT";
+      } else {
+        finishTimeFormatted = "DNF";
       }
 
       return {
         ...player,
-        rank: index + 1,
+        rank: rank || finishers.length + index + 1,
         points: pointsEarned,
         finalWpm: player.finalWpm || player.wpm || 0,
         finalAccuracy: player.finalAccuracy || player.accuracy || 0,
@@ -389,8 +414,9 @@ const MultiplayerGame = ({ user }) => {
 
     setResults(results);
 
+    // Award weekly points and update scores for finishers only
     for (const player of results) {
-      if (player.id === user.uid) {
+      if (player.id === user.uid && player.points > 0) {
         const userScoreRef = ref(database, `users/${user.uid}/score`);
         const snapshot = await get(userScoreRef);
         const currentScore = snapshot.val() || 0;
@@ -438,6 +464,9 @@ const MultiplayerGame = ({ user }) => {
       updates[
         `multiplayer/rooms/${roomId}/playersData/${player.id}/finalAccuracy`
       ] = null;
+      updates[
+        `multiplayer/rooms/${roomId}/playersData/${player.id}/isTimeout`
+      ] = null;
     });
     await update(ref(database), updates);
 
@@ -447,6 +476,9 @@ const MultiplayerGame = ({ user }) => {
     setGameStarted(false);
     setResults(null);
     setIsActive(false);
+    setWpm(0);
+    setAccuracy(100);
+    setCorrectChars(0);
     setTimer(levelData[room?.level]?.timeLimit || 60);
   };
 
@@ -493,12 +525,12 @@ const MultiplayerGame = ({ user }) => {
   // Get car based on player position (using cars 5,8,9,10)
   const getCarForPosition = (position) => {
     const carMap = {
-      1: "car-5",
-      2: "car-8",
-      3: "car-9",
-      4: "car-10",
+      1: "car5",
+      2: "car8",
+      3: "car9",
+      4: "car10",
     };
-    return carMap[position] || "car-5";
+    return carMap[position] || "car5";
   };
 
   // Get car icon based on position
@@ -543,16 +575,22 @@ const MultiplayerGame = ({ user }) => {
   const progress = (inputText.length / targetText.length) * 100;
   const currentPlayer = players.find((p) => p.id === user.uid);
 
-  const racingPlayers = players.map((player) => ({
-    id: player.id,
-    name: player.id === user.uid ? "YOU" : player.name,
-    progress: player.progress || 0,
-    carType: getCarForPosition(player.position),
-    carImage: `/src/assets/cars/${getCarForPosition(player.position)}.png`,
-    color: getCarColor(player.position),
-    boost: player.wpm > 40 && player.accuracy > 95,
-    position: player.position,
-  }));
+  const racingPlayers = players.map((player) => {
+    const carForPosition = getCarForPosition(player.position);
+    console.log(
+      `Player ${player.position} (${player.name}) gets car: ${carForPosition}`,
+    );
+    return {
+      id: player.id,
+      name: player.id === user.uid ? "YOU" : player.name,
+      progress: player.progress || 0,
+      carType: carForPosition,
+      carImage: `/src/assets/cars/${carForPosition}.png`,
+      color: getCarColor(player.position),
+      boost: (player.wpm || 0) > 40 && (player.accuracy || 0) > 95,
+      position: player.position,
+    };
+  });
 
   return (
     <div className="multiplayer-game-container">
@@ -568,13 +606,11 @@ const MultiplayerGame = ({ user }) => {
           <div className="stats-display">
             <div className="stat">
               <span className="stat-label">WPM</span>
-              <span className="stat-value">{currentPlayer?.wpm || 0}</span>
+              <span className="stat-value">{wpm}</span>
             </div>
             <div className="stat">
               <span className="stat-label">ACC</span>
-              <span className="stat-value">
-                {currentPlayer?.accuracy || 100}%
-              </span>
+              <span className="stat-value">{accuracy}%</span>
             </div>
             <div className="stat">
               <span className="stat-label">TIME</span>
@@ -591,8 +627,8 @@ const MultiplayerGame = ({ user }) => {
         <div className="racing-container" style={{ height: "450px" }}>
           <RacingEnvironment
             players={racingPlayers}
-            wpm={currentPlayer?.wpm || 0}
-            accuracy={currentPlayer?.accuracy || 100}
+            wpm={wpm}
+            accuracy={accuracy}
             isRacing={isActive}
             showCountdown={showCountdown}
             countdown={countdown}
@@ -639,7 +675,9 @@ const MultiplayerGame = ({ user }) => {
                 </span>
                 <span className="player-stats">
                   {player.finished
-                    ? "✓ FINISHED"
+                    ? player.isTimeout
+                      ? "⏰ TIMEOUT"
+                      : "✓ FINISHED"
                     : `${Math.floor(player.progress || 0)}%`}
                 </span>
               </div>
@@ -659,7 +697,9 @@ const MultiplayerGame = ({ user }) => {
                 className="result-item"
                 style={{ borderColor: getCarColor(player.position) }}
               >
-                <span className="result-rank">#{player.rank}</span>
+                <span className="result-rank">
+                  {player.rank ? `#${player.rank}` : "-"}
+                </span>
                 <span className="result-name">
                   {player.id === user.uid ? "YOU" : player.name}
                 </span>
@@ -668,7 +708,9 @@ const MultiplayerGame = ({ user }) => {
                 <span className="result-time">
                   {player.finishTimeFormatted}
                 </span>
-                <span className="result-points">+{player.points}</span>
+                <span className="result-points">
+                  {player.points > 0 ? `+${player.points}` : "0"}
+                </span>
               </div>
             ))}
           </div>
