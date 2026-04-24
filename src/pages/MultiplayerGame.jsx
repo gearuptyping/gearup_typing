@@ -158,6 +158,10 @@ const MultiplayerGame = ({ user }) => {
     const unsubscribe = onValue(roomRef, (snapshot) => {
       if (snapshot.exists()) {
         const roomData = snapshot.val();
+        console.log("📢 Room data received:", {
+          status: roomData.status,
+          players: roomData.players,
+        });
         setRoom(roomData);
 
         const playersArray = Object.entries(roomData.playersData || {})
@@ -191,13 +195,26 @@ const MultiplayerGame = ({ user }) => {
     return () => unsubscribe();
   }, [roomId, navigate]);
 
-  // Auto-navigate back to room if status is not playing (FIXED)
+  // Auto-navigate to game when room status becomes "playing"
   useEffect(() => {
     if (!room) return;
-    if (room.status !== "playing") {
+    console.log("📢 Checking room status:", room.status);
+
+    // If room status becomes "playing", navigate ALL players to game
+    if (room.status === "playing") {
+      console.log("🏁 Race starting! Navigating to game...");
+      navigate(`/multiplayer/game/${roomId}`);
+    }
+  }, [room?.status, roomId, navigate]);
+
+  // Auto-navigate back to room if status is not playing (for safety)
+  useEffect(() => {
+    if (!room) return;
+    if (room.status !== "playing" && !loading) {
+      console.log("📢 Room not playing, returning to room...");
       navigate(`/multiplayer/room/${roomId}`);
     }
-  }, [room, roomId, navigate]);
+  }, [room?.status, roomId, navigate, loading]);
 
   // Start countdown only once - FIXED to work for ALL players
   useEffect(() => {
@@ -208,6 +225,7 @@ const MultiplayerGame = ({ user }) => {
     if (isActive) return;
 
     if (players.length > 0) {
+      console.log("🎬 Starting countdown for all players...");
       startCountdown();
       setGameStarted(true);
     }
@@ -472,7 +490,7 @@ const MultiplayerGame = ({ user }) => {
     }
   };
 
-  // Get car based on player position (FIXED - using cars 5,8,9,10)
+  // Get car based on player position (using cars 5,8,9,10)
   const getCarForPosition = (position) => {
     const carMap = {
       1: "car-5",

@@ -375,7 +375,7 @@ const MultiplayerLobby = ({ user }) => {
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
               >
-                {[...Array(50)].map((_, i) => (
+                {[...Array(24)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     Level {i + 1}
                   </option>

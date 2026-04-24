@@ -170,27 +170,22 @@ const MultiplayerRoom = ({ user }) => {
     return () => unsubscribe();
   }, [roomId]);
 
-  // When user joins room - handles regular players and spectators
+  // FIXED: When user joins room - handles ALL players (1st, 2nd, 3rd, 4th)
   useEffect(() => {
     const addUserToRoom = async () => {
       if (!room || !user || !displayName) return;
+
+      // Check if already in room (prevents duplicate entries)
       if (room.playersData && room.playersData[user.uid]) return;
 
-      if (isAdmin && isSpectator) {
-        await update(ref(database), {
-          [`multiplayer/rooms/${roomId}/playersData/${user.uid}`]: {
-            name: displayName,
-            ready: false,
-            isSpectator: true,
-            position: null,
-          },
-        });
-        return;
-      }
+      // Check if room is full (max 4 players, spectators excluded)
+      const currentRacingPlayers = Object.values(room.playersData || {}).filter(
+        (p) => !p.isSpectator,
+      ).length;
 
-      if (room.players >= 4) {
-        alert("Room is full! You can join as spectator if you're an admin.");
+      if (currentRacingPlayers >= 4) {
         if (isAdmin) {
+          // Admin can join as spectator
           if (window.confirm("Room is full. Join as spectator?")) {
             setIsSpectator(true);
             await update(ref(database), {
@@ -202,49 +197,68 @@ const MultiplayerRoom = ({ user }) => {
               },
             });
           }
+        } else {
+          alert("Room is full!");
+          navigate("/multiplayer");
         }
         return;
       }
 
+      // FIXED: Calculate next available position (1,2,3,4)
       const takenPositions = Object.values(room.playersData || {})
-        .filter((p) => !p.isSpectator)
+        .filter((p) => !p.isSpectator && p.position)
         .map((p) => p.position);
 
       let nextPosition = 1;
-      while (takenPositions.includes(nextPosition)) {
+      while (takenPositions.includes(nextPosition) && nextPosition <= 4) {
         nextPosition++;
       }
 
-      await update(ref(database), {
-        [`multiplayer/rooms/${roomId}/playersData/${user.uid}`]: {
-          name: displayName,
-          ready: false,
-          position: nextPosition,
-          isSpectator: false,
-        },
-        [`multiplayer/rooms/${roomId}/players`]: room.players + 1,
-      });
+      // FIXED: Use atomic update to prevent race conditions
+      const updates = {};
+      updates[`multiplayer/rooms/${roomId}/playersData/${user.uid}`] = {
+        name: displayName,
+        ready: false,
+        position: nextPosition,
+        isSpectator: false,
+        joinedAt: Date.now(),
+      };
+      updates[`multiplayer/rooms/${roomId}/players`] = currentRacingPlayers + 1;
+
+      await update(ref(database), updates);
     };
 
     addUserToRoom();
-  }, [room, user, displayName, roomId, navigate, isAdmin, isSpectator]);
+  }, [room, user, displayName, roomId, navigate, isAdmin]);
+
+  // Listen for room status changes to auto-navigate ALL players to game
+  useEffect(() => {
+    if (!room) return;
+
+    // If room status becomes "playing", navigate ALL players to game
+    if (room.status === "playing") {
+      console.log("🏁 Race starting! Navigating to game...");
+      navigate(`/multiplayer/game/${roomId}`);
+    }
+  }, [room?.status, roomId, navigate]);
 
   // Toggle spectator mode (admin only)
   const toggleSpectatorMode = async () => {
     if (!isAdmin) return;
 
     if (isSpectator) {
-      if (room.players >= 4) {
+      const currentRacingPlayers = players.filter((p) => !p.isSpectator).length;
+      if (currentRacingPlayers >= 4) {
         alert("Cannot switch to player - room is full!");
         return;
       }
 
       const takenPositions = players
-        .filter((p) => !p.isSpectator)
+        .filter((p) => !p.isSpectator && p.position)
         .map((p) => p.position);
 
       let nextPosition = 1;
-      while (takenPositions.includes(nextPosition)) {
+      while (takenPositions.includes(nextPosition) && nextPosition <= 4) {
         nextPosition++;
       }
 
@@ -255,7 +269,7 @@ const MultiplayerRoom = ({ user }) => {
           position: nextPosition,
           isSpectator: false,
         },
-        [`multiplayer/rooms/${roomId}/players`]: room.players + 1,
+        [`multiplayer/rooms/${roomId}/players`]: currentRacingPlayers + 1,
       });
     } else {
       await update(ref(database), {
@@ -265,7 +279,8 @@ const MultiplayerRoom = ({ user }) => {
           isSpectator: true,
           position: null,
         },
-        [`multiplayer/rooms/${roomId}/players`]: room.players - 1,
+        [`multiplayer/rooms/${roomId}/players`]:
+          players.filter((p) => !p.isSpectator).length - 1,
       });
     }
 
@@ -313,7 +328,7 @@ const MultiplayerRoom = ({ user }) => {
     setPlayerReady(newReadyState);
   };
 
-  // START GAME - FIXED for all players
+  // FIXED: Start game - updates status to "playing" for ALL players
   const startGame = async () => {
     if (!isHost) return;
 
@@ -330,13 +345,13 @@ const MultiplayerRoom = ({ user }) => {
       return;
     }
 
-    // Update room status to playing and set race start time
+    // FIXED: Update room status to "playing" - this will trigger navigation for ALL players
     await update(ref(database), {
       [`multiplayer/rooms/${roomId}/status`]: "playing",
       [`multiplayer/rooms/${roomId}/raceStartTime`]: Date.now(),
     });
 
-    // Navigate host to game
+    // Host also navigates (the useEffect will also navigate, but this is immediate)
     navigate(`/multiplayer/game/${roomId}`);
   };
 
