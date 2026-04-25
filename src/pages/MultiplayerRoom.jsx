@@ -38,6 +38,9 @@ const MultiplayerRoom = ({ user }) => {
   const [isSpectator, setIsSpectator] = useState(false);
   const [showSpectateConfirm, setShowSpectateConfirm] = useState(false);
 
+  // User level state for ready button restriction
+  const [userHighestLevel, setUserHighestLevel] = useState(1);
+
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
@@ -62,6 +65,25 @@ const MultiplayerRoom = ({ user }) => {
     };
 
     fetchDisplayName();
+  }, [user]);
+
+  // Load user's highest unlocked level
+  useEffect(() => {
+    const fetchUserLevel = async () => {
+      if (!user) return;
+      try {
+        const userRef = ref(database, `users/${user.uid}/unlockedLevels`);
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+          const unlocked = snapshot.val();
+          const highest = Math.max(...unlocked);
+          setUserHighestLevel(highest);
+        }
+      } catch (error) {
+        console.error("Error fetching user level:", error);
+      }
+    };
+    fetchUserLevel();
   }, [user]);
 
   // Check if current user is admin
@@ -311,10 +333,18 @@ const MultiplayerRoom = ({ user }) => {
     setNewMessage("");
   };
 
-  // Toggle ready status (disabled for spectators)
+  // Toggle ready status (disabled for spectators or if player level is insufficient)
   const toggleReady = async () => {
     if (isSpectator) {
       alert("Spectators cannot ready up!");
+      return;
+    }
+
+    // Check if player meets level requirement
+    if (!isAdmin && room?.level > userHighestLevel) {
+      alert(
+        `You need to reach Level ${room?.level} to play this room! Your highest level is ${userHighestLevel}.`,
+      );
       return;
     }
 
@@ -423,6 +453,9 @@ const MultiplayerRoom = ({ user }) => {
     }
   };
 
+  // Check if player can ready up
+  const canReady = isAdmin || userHighestLevel >= (room?.level || 1);
+
   if (loading) {
     return (
       <div className="room-loading">
@@ -474,6 +507,17 @@ const MultiplayerRoom = ({ user }) => {
           <span className="spectator-icon">👁️</span>
           <span className="spectator-message">
             You are in spectator mode. You can watch the race but cannot play.
+          </span>
+        </div>
+      )}
+
+      {/* Level Warning Banner for players who can't ready */}
+      {!isAdmin && !isSpectator && room?.level > userHighestLevel && (
+        <div className="level-warning-banner">
+          <span className="level-warning-icon">⚠️</span>
+          <span className="level-warning-message">
+            You need to reach Level {room?.level} to play this room. Your
+            highest level is {userHighestLevel}.
           </span>
         </div>
       )}
@@ -582,8 +626,13 @@ const MultiplayerRoom = ({ user }) => {
               <button
                 className={`ready-btn ${playerReady ? "ready" : ""}`}
                 onClick={toggleReady}
+                disabled={!canReady}
               >
-                {playerReady ? "✓ READY" : "READY UP"}
+                {!canReady
+                  ? `🔒 Level ${room?.level} Required`
+                  : playerReady
+                    ? "✓ READY"
+                    : "READY UP"}
               </button>
             )}
 

@@ -604,7 +604,7 @@
   flex-shrink: 0;
 }
 
-/* ===== THREE-DOT MENU STYLES ===== */
+/* ===== THREE-DOT MENU STYLES - FIXED (menu appears BELOW button) ===== */
 .three-dot-btn {
   background: transparent;
   border: none;
@@ -627,13 +627,13 @@
 .three-dot-menu {
   position: absolute;
   right: 0;
-  bottom: 100%;
+  top: 100%;
   background: #1e2a3a;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   min-width: 160px;
   z-index: 1000;
-  margin-bottom: 8px;
+  margin-top: 8px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   animation: menuFadeIn 0.2s ease;
@@ -642,7 +642,7 @@
 @keyframes menuFadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;

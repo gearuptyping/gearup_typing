@@ -1,4 +1,4 @@
-// MultiplayerLobby.js - Lobby for creating/joining multiplayer rooms with admin bypass and car display
+// MultiplayerLobby.js - Lobby for creating/joining multiplayer rooms with admin bypass and level restrictions
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { database } from "../firebase";
@@ -20,6 +20,10 @@ const MultiplayerLobby = ({ user }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("");
+
+  // User Level States
+  const [userUnlockedLevels, setUserUnlockedLevels] = useState([1]);
+  const [userHighestLevel, setUserHighestLevel] = useState(1);
 
   // Admin Status States
   const [hostsAdminStatus, setHostsAdminStatus] = useState({});
@@ -58,6 +62,31 @@ const MultiplayerLobby = ({ user }) => {
     fetchDisplayName();
   }, [user]);
 
+  // Load user's unlocked levels
+  useEffect(() => {
+    const fetchUserLevels = async () => {
+      if (!user) return;
+      try {
+        const userRef = ref(database, `users/${user.uid}/unlockedLevels`);
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+          const unlocked = snapshot.val();
+          setUserUnlockedLevels(unlocked);
+          const highest = Math.max(...unlocked);
+          setUserHighestLevel(highest);
+        } else {
+          setUserUnlockedLevels([1]);
+          setUserHighestLevel(1);
+        }
+      } catch (error) {
+        console.error("Error fetching user levels:", error);
+        setUserUnlockedLevels([1]);
+        setUserHighestLevel(1);
+      }
+    };
+    fetchUserLevels();
+  }, [user]);
+
   // Check if current user is admin
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -68,7 +97,7 @@ const MultiplayerLobby = ({ user }) => {
     checkAdminStatus();
   }, [user]);
 
-  // Load rooms from Firebase in real-time
+  // Load rooms from Firebase in real-time - FILTERED BY PLAYER'S LEVEL
   useEffect(() => {
     const roomsRef = ref(database, "multiplayer/rooms");
 
@@ -81,9 +110,14 @@ const MultiplayerLobby = ({ user }) => {
             ...child.val(),
           });
         });
+
+        // Filter rooms: only show rooms with level <= player's highest level
+        // Admin sees all rooms
         const availableRooms = roomsData
           .filter((room) => room.players < 4 && room.status === "waiting")
+          .filter((room) => isAdmin || room.level <= userHighestLevel)
           .sort((a, b) => b.createdAt - a.createdAt);
+
         setRooms(availableRooms);
       } else {
         setRooms([]);
@@ -92,7 +126,7 @@ const MultiplayerLobby = ({ user }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [userHighestLevel, isAdmin]);
 
   // Check which hosts are admins
   useEffect(() => {
@@ -143,6 +177,14 @@ const MultiplayerLobby = ({ user }) => {
       return;
     }
 
+    // Check if player can create room at this level
+    if (!isAdmin && selectedLevel > userHighestLevel) {
+      setCreateError(
+        `You cannot create a room at Level ${selectedLevel}. Your highest unlocked level is ${userHighestLevel}.`,
+      );
+      return;
+    }
+
     try {
       const roomsRef = ref(database, "multiplayer/rooms");
       const newRoomRef = push(roomsRef);
@@ -174,10 +216,18 @@ const MultiplayerLobby = ({ user }) => {
     }
   };
 
-  // Join an existing room with admin bypass
-  const handleJoinRoom = (room) => {
+  // Join an existing room with admin bypass and level check
+  const handleJoinRoom = async (room) => {
     if (room.players >= 4) {
       alert("Room is full!");
+      return;
+    }
+
+    // Level check for non-admin players
+    if (!isAdmin && room.level > userHighestLevel) {
+      alert(
+        `You need to reach Level ${room.level} to join this room! Your highest unlocked level is ${userHighestLevel}.`,
+      );
       return;
     }
 
@@ -198,7 +248,7 @@ const MultiplayerLobby = ({ user }) => {
     navigate(`/multiplayer/room/${room.id}`);
   };
 
-  // Quick join - includes private rooms for admins
+  // Quick join - includes private rooms for admins, respects level limits
   const handleQuickJoin = () => {
     if (isAdmin) {
       const availableRoom = rooms.find((r) => r.players < 4);
@@ -265,7 +315,7 @@ const MultiplayerLobby = ({ user }) => {
           <span className="admin-icon">👑</span>
           <span className="admin-message">
             You have admin privileges: You can join any private room without a
-            password!
+            password and bypass level restrictions!
           </span>
         </div>
       )}
@@ -281,7 +331,11 @@ const MultiplayerLobby = ({ user }) => {
         ) : rooms.length === 0 ? (
           <div className="no-rooms">
             <p>No rooms available</p>
-            <span>Create a new room to start racing!</span>
+            <span>
+              {!isAdmin && userHighestLevel === 1
+                ? "Complete more solo levels to unlock higher level rooms!"
+                : "Create a new room to start racing!"}
+            </span>
           </div>
         ) : (
           <div className="rooms-grid">
@@ -318,6 +372,9 @@ const MultiplayerLobby = ({ user }) => {
                   <div className="room-level">
                     <span className="label">Level:</span>
                     <span className="value">{getLevelDisplay(room.level)}</span>
+                    {!isAdmin && room.level > userHighestLevel && (
+                      <span className="level-warning">🔒 Too high</span>
+                    )}
                   </div>
                   <div className="room-players">
                     <span className="label">Players:</span>
@@ -338,11 +395,14 @@ const MultiplayerLobby = ({ user }) => {
                   </span>
                   {room.players < 4 && room.status === "waiting" && (
                     <button
-                      className={`join-btn ${room.isPrivate && isAdmin ? "admin-join" : ""}`}
+                      className={`join-btn ${room.isPrivate && isAdmin ? "admin-join" : ""} ${!isAdmin && room.level > userHighestLevel ? "disabled" : ""}`}
+                      disabled={!isAdmin && room.level > userHighestLevel}
                     >
                       {room.isPrivate && isAdmin
                         ? "👑 JOIN AS ADMIN"
-                        : "JOIN →"}
+                        : !isAdmin && room.level > userHighestLevel
+                          ? `🔒 Level ${room.level} Required`
+                          : "JOIN →"}
                     </button>
                   )}
                 </div>
@@ -375,12 +435,17 @@ const MultiplayerLobby = ({ user }) => {
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
               >
-                {[...Array(24)].map((_, i) => (
+                {[...Array(isAdmin ? 24 : userHighestLevel)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     Level {i + 1}
                   </option>
                 ))}
               </select>
+              {!isAdmin && (
+                <span className="level-hint">
+                  Max level you can create: {userHighestLevel}
+                </span>
+              )}
             </div>
 
             <div className="form-group">

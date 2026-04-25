@@ -30,6 +30,7 @@ import {
   getUsersAdminStatus,
 } from "../services/adminService";
 import { getTotalUnreadFriendMessages } from "../services/chatService";
+import { filterDisplayName } from "../utils/profanityFilter";
 import "./Account.css";
 
 const Account = ({ user }) => {
@@ -120,9 +121,10 @@ const Account = ({ user }) => {
         }
       } else {
         const initialName = user.email.split("@")[0];
+        const filteredInitialName = filterDisplayName(initialName, false);
         const newUser = {
           email: user.email,
-          displayName: initialName,
+          displayName: filteredInitialName,
           level: 1,
           score: 0,
           friends: [],
@@ -132,7 +134,7 @@ const Account = ({ user }) => {
         };
         await set(userRef, newUser);
 
-        setDisplayName(initialName);
+        setDisplayName(filteredInitialName);
         setLevel(1);
         setUnlockedLevels([1]);
         setLevelScores({});
@@ -224,16 +226,31 @@ const Account = ({ user }) => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Handle Display Name Update
+  // FIXED: Handle Display Name Update with profanity filter
   const handleUpdateDisplayName = async () => {
     if (!displayName.trim()) return;
+
+    // Filter profanity before saving
+    const filteredName = filterDisplayName(displayName, true);
+
+    let alertMessage = "";
+    if (filteredName !== displayName) {
+      alertMessage =
+        "Your display name contained inappropriate words and has been filtered.";
+    }
 
     try {
       setLoading(true);
       const userRef = ref(database, `users/${user.uid}`);
-      await update(userRef, { displayName });
+      await update(userRef, { displayName: filteredName });
+      setDisplayName(filteredName);
       setEditing(false);
-      alert("Display name updated!");
+
+      if (alertMessage) {
+        alert(alertMessage + ` New display name: ${filteredName}`);
+      } else {
+        alert("Display name updated!");
+      }
     } catch (error) {
       console.error("Update error:", error);
       alert("Failed to update display name.");
@@ -469,7 +486,7 @@ const Account = ({ user }) => {
     return progressToNext;
   };
 
-  // Main Render
+  // Main Render (unchanged)
   return (
     <div className="account-container">
       {/* Header Section */}

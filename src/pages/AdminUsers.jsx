@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
+import { database } from "../firebase";
+import { ref, onValue, get } from "firebase/database";
 import "./AdminUsers.css";
 import {
   getAllUsers,
@@ -47,6 +49,30 @@ const AdminUsers = () => {
     filterUsers();
   }, [users, filterStatus, searchTerm]);
 
+  // Real-time listener for online status updates
+  useEffect(() => {
+    if (!users.length) return;
+
+    const unsubscribes = [];
+
+    users.forEach((user) => {
+      const statusRef = ref(database, `/status/${user.uid}/state`);
+      const unsubscribe = onValue(statusRef, (snapshot) => {
+        const isOnline = snapshot.val() === "online";
+        setUsers((prevUsers) =>
+          prevUsers.map((u) =>
+            u.uid === user.uid ? { ...u, online: isOnline } : u,
+          ),
+        );
+      });
+      unsubscribes.push(unsubscribe);
+    });
+
+    return () => {
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
+  }, [users.length]);
+
   // Verify admin and load users data
   const checkAdminAndLoadUsers = async () => {
     try {
@@ -74,23 +100,30 @@ const AdminUsers = () => {
     }
   };
 
-  // Load all users with ban status
+  // Load all users with ban status AND online status
   const loadUsers = async () => {
     try {
       const allUsers = await getAllUsers();
 
-      const usersWithBanStatus = await Promise.all(
+      const usersWithStatus = await Promise.all(
         allUsers.map(async (user) => {
           const banStatus = await isUserBanned(user.uid);
+
+          // Get online status from presence service
+          const statusRef = ref(database, `/status/${user.uid}/state`);
+          const statusSnapshot = await get(statusRef);
+          const isOnline = statusSnapshot.val() === "online";
+
           return {
             ...user,
             isBanned: banStatus.banned,
             banInfo: banStatus.banned ? banStatus : null,
+            online: isOnline,
           };
         }),
       );
 
-      setUsers(usersWithBanStatus);
+      setUsers(usersWithStatus);
     } catch (error) {
       console.error("Error loading users:", error);
     }

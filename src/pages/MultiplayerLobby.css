@@ -627,6 +627,41 @@
   }
 }
 
+/* ===== LEVEL RESTRICTION STYLES ===== */
+
+/* Disabled Join Button */
+.join-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.join-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Level Hint in Create Modal */
+.level-hint {
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+/* Level Warning Badge on Room Card */
+.level-warning {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff8888;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 5px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .online-dot,
@@ -709,6 +744,15 @@
   }
 }
 
+.level-hint {
+  font-size: 0.65rem;
+}
+
+.level-warning {
+  font-size: 0.6rem;
+  padding: 1px 4px;
+}
+
 /* Small Mobile */
 @media (max-width: 480px) {
   .lobby-title h1 {
@@ -786,6 +830,16 @@
   }
 }
 
+.level-hint {
+  font-size: 0.6rem;
+}
+
+.level-warning {
+  font-size: 0.55rem;
+  padding: 1px 3px;
+  margin-left: 3px;
+}
+
 /* Very Small Mobile */
 @media (max-width: 380px) {
   .lobby-container {
@@ -847,4 +901,12 @@
     padding: 0.5rem;
     font-size: 0.75rem;
   }
+}
+.level-hint {
+  font-size: 0.55rem;
+}
+
+.level-warning {
+  font-size: 0.5rem;
+  padding: 1px 2px;
 }

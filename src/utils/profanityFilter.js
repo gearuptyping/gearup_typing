@@ -1,4 +1,6 @@
 // profanityFilter.js - Chat message filter for bad words with leet speak support
+// Also includes display name filtering (replaces bad words with "princess")
+
 // Common English profanity words to filter
 const badWords = [
   // F-word variations
@@ -66,17 +68,70 @@ const badWords = [
   // Penis variations
   "penis",
   "penises",
-  "dick",
   "dong",
   "wang",
   "weiner",
   "wiener",
   // Vagina variations
   "vagina",
-  "pussy",
   "coochie",
   "cooch",
-  "cunt",
+  // Violence/Death words
+  "kill",
+  "killing",
+  "killed",
+  "killer",
+  "murder",
+  "murdering",
+  "murderer",
+  "death",
+  "dead",
+  "slaughter",
+  "massacre",
+  "execute",
+  "execution",
+  "hang",
+  "hanging",
+  "suicide",
+  "fatal",
+  "lethal",
+  "deadly",
+  // Sexual/Predator words
+  "pedophile",
+  "pedo",
+  "rapist",
+  "rape",
+  "raping",
+  "raped",
+  "molest",
+  "molester",
+  "incest",
+  "beastiality",
+  "porn",
+  "xxx",
+  // Hate speech/Slurs
+  "faggot",
+  "faggots",
+  "fag",
+  "fags",
+  "f4ggot",
+  "nigger",
+  "nigga",
+  "n1gger",
+  "n1gga",
+  "retard",
+  "retarded",
+  "re3ard",
+  "spastic",
+  "tranny",
+  "chink",
+  "kike",
+  "gook",
+  "cracker",
+  "wetback",
+  "sandnigger",
+  "raghead",
+  "towelhead",
   // Miscellaneous
   "bastard",
   "bastards",
@@ -96,30 +151,6 @@ const badWords = [
   "slut",
   "sluts",
   "slutty",
-  "nigger",
-  "nigga",
-  "n1gger",
-  "n1gga",
-  "faggot",
-  "faggots",
-  "fag",
-  "fags",
-  "f4ggot",
-  "retard",
-  "retarded",
-  "retard",
-  "re3ard",
-  "rape",
-  "raping",
-  "raped",
-  "kill",
-  "killing",
-  "killed",
-  "murder",
-  "murdering",
-  "suicide",
-  "kill yourself",
-  "kys",
   "crap",
   "crapper",
   "crappy",
@@ -129,6 +160,8 @@ const badWords = [
   "wanker",
   "wankers",
   "wank",
+  "kys",
+  "kill yourself",
 ];
 
 // Leet speak mappings (number/character substitutions)
@@ -159,7 +192,7 @@ const convertLeetToNormal = (text) => {
   return converted;
 };
 
-// Filter message - replaces bad words with asterisks (*)
+// Filter chat message - replaces bad words with asterisks (*)
 export const filterMessage = (message) => {
   let filteredMessage = message;
 
@@ -213,6 +246,141 @@ export const containsProfanity = (message) => {
     const regex = new RegExp("\\b" + word + "\\b", "i");
     return regex.test(lowerMessage) || regex.test(normalizedMessage);
   });
+};
+
+// Generate a random number for default username
+const getRandomNumber = () => {
+  return Math.floor(Math.random() * 900) + 100; // Returns number between 100-999
+};
+
+// Filter display name - replaces bad words with "princess"
+export const filterDisplayName = (name, useRandomNumber = true) => {
+  if (!name || typeof name !== "string") {
+    return useRandomNumber ? `Player${getRandomNumber()}` : "Player";
+  }
+
+  let filteredName = name;
+
+  // First, check for leet speak versions
+  const normalizedName = convertLeetToNormal(name);
+
+  // Check each bad word
+  badWords.forEach((word) => {
+    // Check original name
+    const regexOriginal = new RegExp("\\b" + word + "\\b", "gi");
+    if (regexOriginal.test(filteredName)) {
+      filteredName = filteredName.replace(regexOriginal, "princess");
+    }
+
+    // Check normalized version for leet speak
+    if (normalizedName.toLowerCase().includes(word.toLowerCase())) {
+      // Find where the bad word appears and replace that part
+      const wordIndex = normalizedName
+        .toLowerCase()
+        .indexOf(word.toLowerCase());
+      if (wordIndex !== -1) {
+        const originalWord = filteredName.substring(
+          wordIndex,
+          wordIndex + word.length,
+        );
+        filteredName = filteredName.replace(originalWord, "princess");
+      }
+    }
+  });
+
+  // Also check for embedded bad words (within words) for stricter filtering
+  const embeddedBadWords = [
+    "ass",
+    "shit",
+    "fuck",
+    "cunt",
+    "dick",
+    "cock",
+    "kill",
+    "murder",
+    "rape",
+    "pedo",
+  ];
+  embeddedBadWords.forEach((word) => {
+    const regex = new RegExp(word, "gi");
+    if (regex.test(filteredName)) {
+      filteredName = filteredName.replace(regex, "princess");
+    }
+  });
+
+  // Remove special characters (keep letters, numbers, spaces)
+  filteredName = filteredName.replace(/[^a-zA-Z0-9\s]/g, "");
+  filteredName = filteredName.replace(/\s+/g, " ").trim();
+
+  // Limit length to 20 characters
+  if (filteredName.length > 20) {
+    filteredName = filteredName.substring(0, 20);
+  }
+
+  // Remove any remaining "princess" duplicates and clean up
+  filteredName = filteredName.replace(/(princess\s*)+/gi, "princess");
+
+  // If name contains "princess" and nothing else, or is empty, generate default
+  if (
+    !filteredName ||
+    filteredName.toLowerCase() === "princess" ||
+    filteredName.length === 0
+  ) {
+    return useRandomNumber ? `Player${getRandomNumber()}` : "Player";
+  }
+
+  // If filtered name still contains bad words (edge cases), replace whole thing
+  let stillHasProfanity = false;
+  badWords.forEach((word) => {
+    const regex = new RegExp(word, "gi");
+    if (regex.test(filteredName)) {
+      stillHasProfanity = true;
+    }
+  });
+
+  if (stillHasProfanity) {
+    return useRandomNumber ? `Racer${getRandomNumber()}` : "Racer";
+  }
+
+  // Capitalize first letter of each word
+  filteredName = filteredName
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+
+  return filteredName;
+};
+
+// Check if display name contains profanity (for validation before save)
+export const containsDisplayNameProfanity = (name) => {
+  if (!name) return false;
+
+  const normalizedName = convertLeetToNormal(name);
+
+  // Check bad words
+  const hasBadWord = badWords.some((word) => {
+    const regex = new RegExp("\\b" + word + "\\b", "i");
+    return regex.test(normalizedName);
+  });
+
+  // Check embedded bad words
+  const embeddedBadWords = [
+    "ass",
+    "shit",
+    "fuck",
+    "cunt",
+    "dick",
+    "cock",
+    "kill",
+    "murder",
+    "rape",
+    "pedo",
+  ];
+  const hasEmbedded = embeddedBadWords.some((word) => {
+    return normalizedName.toLowerCase().includes(word.toLowerCase());
+  });
+
+  return hasBadWord || hasEmbedded;
 };
 
 // Get the list of bad words (for admin reference)

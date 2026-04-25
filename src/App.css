@@ -17,27 +17,6 @@ body {
   background: #41588a;
 }
 
-/* Prevent horizontal scroll and white bars */
-html,
-body {
-  overflow-x: hidden;
-  width: 100%;
-  position: relative;
-}
-
-/* ADD THIS - Fix root element overflow */
-#root {
-  overflow-x: hidden;
-  width: 100%;
-  position: relative;
-  min-height: 100vh;
-}
-
-* {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
 /* Loading Screen */
 .loading-screen {
   min-height: 100vh;

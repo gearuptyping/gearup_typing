@@ -10,11 +10,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Let browser handle vertical scroll naturally - NO forced overflow-y */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
 /* Fix root element */
 #root {
   overflow-x: hidden;
   width: 100%;
   position: relative;
+  min-height: 100vh;
 }
 
 * {
@@ -26,13 +37,4 @@ body {
 code {
   font-family:
     source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-/* Force proper scrolling */
-html,
-body,
-#root {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  height: auto !important;
-  min-height: 100vh;
 }
