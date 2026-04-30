@@ -364,6 +364,44 @@
   transform: scale(0.98);
 }
 
+/* ===== PASSWORD INPUT WITH EYE TOGGLE ===== */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  padding-right: 45px !important;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 2;
+}
+
+.password-toggle-btn:hover {
+  color: gold;
+  transform: scale(1.1);
+}
+
+.password-toggle-btn:active {
+  transform: scale(0.95);
+}
+
 /* ===== RESPONSIVE ===== */
 
 /* Tablet */
@@ -416,6 +454,15 @@
 
   .floating-letter-auth {
     opacity: 0.05;
+  }
+
+  .password-toggle-btn {
+    font-size: 1rem;
+    right: 8px;
+  }
+
+  .password-input-wrapper input {
+    padding-right: 40px !important;
   }
 }
 

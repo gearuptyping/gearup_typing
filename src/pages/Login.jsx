@@ -4,6 +4,41 @@ import { useNavigate, Link } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "../firebase";
 import "./AuthPages.css";
 
+// Password input component with eye toggle
+const PasswordInput = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+  showPassword,
+  setShowPassword,
+  id,
+}) => {
+  return (
+    <div className="form-group">
+      <label>{label}</label>
+      <div className="password-input-wrapper">
+        <input
+          type={showPassword ? "text" : "password"}
+          value={value}
+          onChange={onChange}
+          required
+          placeholder={placeholder}
+          id={id}
+        />
+        <button
+          type="button"
+          className="password-toggle-btn"
+          onClick={() => setShowPassword(!showPassword)}
+          tabIndex="-1"
+        >
+          {showPassword ? "👁️" : "👁️‍🗨️"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Login = () => {
   // State Variables
   const [email, setEmail] = useState("");
@@ -11,6 +46,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [floatingLetters, setFloatingLetters] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -120,16 +156,15 @@ const Login = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Enter your password"
-            />
-          </div>
+          <PasswordInput
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+            id="password"
+          />
 
           <button type="submit" disabled={loading} className="auth-button">
             {loading ? "Logging in..." : "Log In"}

@@ -4,6 +4,41 @@ import { useNavigate, Link } from "react-router-dom";
 import { auth, createUserWithEmailAndPassword } from "../firebase";
 import "./AuthPages.css";
 
+// Password input component with eye toggle
+const PasswordInput = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+  showPassword,
+  setShowPassword,
+  id,
+}) => {
+  return (
+    <div className="form-group">
+      <label>{label}</label>
+      <div className="password-input-wrapper">
+        <input
+          type={showPassword ? "text" : "password"}
+          value={value}
+          onChange={onChange}
+          required
+          placeholder={placeholder}
+          id={id}
+        />
+        <button
+          type="button"
+          className="password-toggle-btn"
+          onClick={() => setShowPassword(!showPassword)}
+          tabIndex="-1"
+        >
+          {showPassword ? "👁️" : "👁️‍🗨️"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const SignUp = () => {
   // State Variables
   const [email, setEmail] = useState("");
@@ -12,6 +47,8 @@ const SignUp = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [floatingLetters, setFloatingLetters] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -130,27 +167,25 @@ const SignUp = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Enter password (min 6 characters)"
-            />
-          </div>
+          <PasswordInput
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter password (min 6 characters)"
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+            id="password"
+          />
 
-          <div className="form-group">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              placeholder="Confirm your password"
-            />
-          </div>
+          <PasswordInput
+            label="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm your password"
+            showPassword={showConfirmPassword}
+            setShowPassword={setShowConfirmPassword}
+            id="confirmPassword"
+          />
 
           <button type="submit" disabled={loading} className="auth-button">
             {loading ? "Creating Account..." : "Sign Up"}
