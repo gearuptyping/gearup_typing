@@ -45,7 +45,6 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [floatingLetters, setFloatingLetters] = useState([]);
@@ -98,10 +97,6 @@ const SignUp = () => {
       return setError("Password should be at least 6 characters");
     }
 
-    if (!displayName.trim()) {
-      return setError("Please enter a display name");
-    }
-
     try {
       setError("");
       setLoading(true);
@@ -115,13 +110,16 @@ const SignUp = () => {
       const user = userCredential.user;
       console.log("User created:", user.email);
 
+      // Generate display name from email (before @ symbol)
+      const displayNameFromEmail = user.email.split("@")[0];
+
       // Store user data in Firebase Realtime Database
       const userRef = ref(database, `users/${user.uid}`);
       await set(userRef, {
         uid: user.uid,
         email: user.email,
-        displayName: displayName.trim(),
-        username: displayName.trim().toLowerCase().replace(/\s/g, ""),
+        displayName: displayNameFromEmail,
+        username: displayNameFromEmail.toLowerCase().replace(/\s/g, ""),
         createdAt: Date.now(),
         lastLogin: Date.now(),
         level: 1,
@@ -184,17 +182,6 @@ const SignUp = () => {
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label>Display Name</label>
-            <input
-              type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              required
-              placeholder="Enter your display name"
-            />
-          </div>
-
           <div className="form-group">
             <label>Email</label>
             <input
