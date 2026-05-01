@@ -1,7 +1,8 @@
 // Login.js - Login page for user authentication with Firebase
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { auth, signInWithEmailAndPassword } from "../firebase";
+import { auth, signInWithEmailAndPassword, database } from "../firebase";
+import { ref, update } from "firebase/database";
 import "./AuthPages.css";
 
 // Password input component with eye toggle
@@ -95,7 +96,21 @@ const Login = () => {
         email,
         password,
       );
-      console.log("Logged in:", userCredential.user.email);
+      const user = userCredential.user;
+      console.log("Logged in:", user.email);
+
+      // Update lastLogin and lastOnline in Firebase Realtime Database
+      const userRef = ref(database, `users/${user.uid}`);
+      await update(userRef, {
+        lastLogin: Date.now(),
+      });
+
+      // Update status for online tracking
+      const statusRef = ref(database, `status/${user.uid}`);
+      await update(statusRef, {
+        isOnline: true,
+        lastOnline: Date.now(),
+      });
 
       navigate("/");
     } catch (error) {

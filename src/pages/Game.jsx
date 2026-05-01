@@ -40,7 +40,47 @@ const Game = ({ user }) => {
   const inputRef = useRef(null);
   const timerRef = useRef(null);
   const countdownRef = useRef(null);
+  const activityIntervalRef = useRef(null);
   const [audioContext, setAudioContext] = useState(null);
+
+  // Update lastActive periodically while user is playing
+  useEffect(() => {
+    if (!user) return;
+
+    const updateLastActive = async () => {
+      try {
+        const statusRef = ref(database, `status/${user.uid}`);
+        await update(statusRef, {
+          lastOnline: Date.now(),
+          isOnline: true,
+        });
+      } catch (error) {
+        console.log("Error updating lastActive:", error);
+      }
+    };
+
+    // Update immediately
+    updateLastActive();
+
+    // Update every 2 minutes while on game page
+    activityIntervalRef.current = setInterval(updateLastActive, 2 * 60 * 1000);
+
+    // Update on user activity (typing)
+    const handleActivity = () => {
+      updateLastActive();
+    };
+
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("click", handleActivity);
+
+    return () => {
+      if (activityIntervalRef.current) {
+        clearInterval(activityIntervalRef.current);
+      }
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("click", handleActivity);
+    };
+  }, [user]);
 
   // Fetch user's display name
   useEffect(() => {
@@ -352,6 +392,20 @@ const Game = ({ user }) => {
     }, 1000);
   };
 
+  // Increment gamesPlayed function
+  const incrementGamesPlayed = async () => {
+    try {
+      const userRef = ref(database, `users/${user.uid}`);
+      const userSnapshot = await get(userRef);
+      const currentGames = userSnapshot.val()?.gamesPlayed || 0;
+      await update(userRef, {
+        gamesPlayed: currentGames + 1,
+      });
+    } catch (error) {
+      console.error("Error incrementing gamesPlayed:", error);
+    }
+  };
+
   // End Game Function
   const endGame = async () => {
     setIsActive(false);
@@ -419,7 +473,7 @@ const Game = ({ user }) => {
           if (!unlockedLevels.includes(levelNum + 1) && levelNum < 24) {
             unlockedLevels.push(levelNum + 1);
 
-            // Check and unlock car when reaching milestone levels (3,6,9,12,15,18,24)
+            // Check and unlock car when reaching milestone levels (3,6,9,12,15,18,21,24)
             const carUnlockResult = await checkAndUnlockCar(
               user.uid,
               levelNum + 1,
@@ -446,6 +500,9 @@ const Game = ({ user }) => {
         }
 
         await update(userRef, updates);
+
+        // Increment gamesPlayed counter
+        await incrementGamesPlayed();
 
         // Weekly points
         const weeklyPoints = calculateSoloPoints(

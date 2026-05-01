@@ -375,7 +375,7 @@ export const getBannedUsers = async () => {
   }
 };
 
-// Get all users
+// Get all users with complete information (lastActive, lastLogin, gamesPlayed)
 export const getAllUsers = async () => {
   try {
     const db = getDatabase();
@@ -385,12 +385,57 @@ export const getAllUsers = async () => {
     if (!snapshot.exists()) return [];
 
     const users = [];
-    snapshot.forEach((childSnapshot) => {
+
+    for (const childSnapshot of snapshot) {
+      const userId = childSnapshot.key;
+      const userData = childSnapshot.val();
+
+      // Fetch lastActive from /status/{userId}/lastOnline
+      let lastActive = null;
+      try {
+        const statusRef = ref(db, `status/${userId}/lastOnline`);
+        const statusSnapshot = await get(statusRef);
+        if (statusSnapshot.exists()) {
+          lastActive = statusSnapshot.val();
+        }
+      } catch (e) {
+        console.log(`Could not fetch lastActive for ${userId}`);
+      }
+
+      // Fetch lastLogin from /users/{userId}/lastLogin
+      let lastLogin = userData.lastLogin || null;
+
+      // Fetch games played (solo + multiplayer)
+      let gamesPlayed = 0;
+      try {
+        // Solo games count from /scores/{userId}
+        const soloRef = ref(db, `scores/${userId}`);
+        const soloSnapshot = await get(soloRef);
+        if (soloSnapshot.exists()) {
+          gamesPlayed += soloSnapshot.size;
+        }
+
+        // Multiplayer games count from /multiplayerGames/{userId}
+        const mpRef = ref(db, `multiplayerGames/${userId}`);
+        const mpSnapshot = await get(mpRef);
+        if (mpSnapshot.exists()) {
+          gamesPlayed += mpSnapshot.size;
+        }
+      } catch (e) {
+        console.log(`Could not fetch gamesPlayed for ${userId}`);
+      }
+
       users.push({
-        uid: childSnapshot.key,
-        ...childSnapshot.val(),
+        uid: userId,
+        ...userData,
+        lastActive: lastActive || userData.lastActive || lastLogin || null,
+        lastLogin: lastLogin,
+        gamesPlayed: gamesPlayed || userData.gamesPlayed || 0,
       });
-    });
+    }
+
+    // Sort by lastActive (most recent first)
+    users.sort((a, b) => (b.lastActive || 0) - (a.lastActive || 0));
 
     return users;
   } catch (error) {

@@ -34,6 +34,46 @@ const MultiplayerGame = ({ user }) => {
   const inputRef = useRef(null);
   const timerRef = useRef(null);
   const countdownRef = useRef(null);
+  const activityIntervalRef = useRef(null);
+
+  // Update lastActive periodically while user is playing
+  useEffect(() => {
+    if (!user) return;
+
+    const updateLastActive = async () => {
+      try {
+        const statusRef = ref(database, `status/${user.uid}`);
+        await update(statusRef, {
+          lastOnline: Date.now(),
+          isOnline: true,
+        });
+      } catch (error) {
+        console.log("Error updating lastActive:", error);
+      }
+    };
+
+    // Update immediately
+    updateLastActive();
+
+    // Update every 2 minutes while on game page
+    activityIntervalRef.current = setInterval(updateLastActive, 2 * 60 * 1000);
+
+    // Update on user activity (typing)
+    const handleActivity = () => {
+      updateLastActive();
+    };
+
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("click", handleActivity);
+
+    return () => {
+      if (activityIntervalRef.current) {
+        clearInterval(activityIntervalRef.current);
+      }
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("click", handleActivity);
+    };
+  }, [user]);
 
   // COMPLETE 24 levels with progressive difficulty paragraphs (FULL VERSION - matching solo game)
   const levelData = {
@@ -298,6 +338,20 @@ const MultiplayerGame = ({ user }) => {
     }
   }, [players, raceFinished]);
 
+  // Increment gamesPlayed function
+  const incrementGamesPlayed = async () => {
+    try {
+      const userRef = ref(database, `users/${user.uid}`);
+      const userSnapshot = await get(userRef);
+      const currentGames = userSnapshot.val()?.gamesPlayed || 0;
+      await update(userRef, {
+        gamesPlayed: currentGames + 1,
+      });
+    } catch (error) {
+      console.error("Error incrementing gamesPlayed:", error);
+    }
+  };
+
   // Start countdown function
   const startCountdown = () => {
     setShowCountdown(true);
@@ -413,6 +467,9 @@ const MultiplayerGame = ({ user }) => {
     });
 
     setResults(results);
+
+    // Increment gamesPlayed for current user
+    await incrementGamesPlayed();
 
     // Award weekly points and update scores for finishers only
     for (const player of results) {

@@ -1,7 +1,8 @@
 // SignUp.js - Sign up page for new user registration with Firebase
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { auth, createUserWithEmailAndPassword } from "../firebase";
+import { auth, createUserWithEmailAndPassword, database } from "../firebase";
+import { ref, set } from "firebase/database";
 import "./AuthPages.css";
 
 // Password input component with eye toggle
@@ -44,6 +45,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [floatingLetters, setFloatingLetters] = useState([]);
@@ -96,19 +98,45 @@ const SignUp = () => {
       return setError("Password should be at least 6 characters");
     }
 
+    if (!displayName.trim()) {
+      return setError("Please enter a display name");
+    }
+
     try {
       setError("");
       setLoading(true);
 
+      // Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
       );
-      console.log("User created:", userCredential.user.email);
+      const user = userCredential.user;
+      console.log("User created:", user.email);
 
-      // TODO: Add welcome email functionality here later
-      // Options: Firebase Extensions, EmailJS, or SendGrid
+      // Store user data in Firebase Realtime Database
+      const userRef = ref(database, `users/${user.uid}`);
+      await set(userRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: displayName.trim(),
+        username: displayName.trim().toLowerCase().replace(/\s/g, ""),
+        createdAt: Date.now(),
+        lastLogin: Date.now(),
+        level: 1,
+        totalScore: 0,
+        gamesPlayed: 0,
+        carsUnlocked: [],
+        isBanned: false,
+      });
+
+      // Also create an entry in status for online tracking
+      const statusRef = ref(database, `status/${user.uid}`);
+      await set(statusRef, {
+        isOnline: true,
+        lastOnline: Date.now(),
+      });
 
       navigate("/");
     } catch (error) {
@@ -156,6 +184,17 @@ const SignUp = () => {
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Display Name</label>
+            <input
+              type="text"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              required
+              placeholder="Enter your display name"
+            />
+          </div>
+
           <div className="form-group">
             <label>Email</label>
             <input
