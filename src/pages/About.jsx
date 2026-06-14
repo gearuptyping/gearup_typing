@@ -124,25 +124,13 @@ const About = () => {
           </p>
         </section>
 
-        {/* Built With - UPDATED (removed Socket.IO) */}
-        <section className="about-section">
-          <h2>⚙️ Built With</h2>
-          <p>GearUp Typing is built using modern web technologies:</p>
-          <ul>
-            <li>⚛️ React 19 - Frontend framework</li>
-            <li>🔥 Firebase - Authentication & Realtime Database</li>
-            <li>🎨 CSS3 - Animations and responsive design</li>
-            <li>⚡ Vite - Fast build tool and development server</li>
-          </ul>
-        </section>
-
         {/* Creator */}
         <section className="about-section">
-          <h2>👨‍💻 Created By</h2>
+          <h2>👨‍💻 Meet the Developers</h2>
           <p>
-            GearUp Typing was created by passionate developers and racing
-            enthusiasts who believe learning should be fun and competitive. Race
-            your way to typing mastery!
+            <strong>Maheen & Nimra</strong>
+            We built GearUp Typing because we wanted to make typing practice
+            actually fun. No boring drills. Just racing and competition.
           </p>
         </section>
       </div>
