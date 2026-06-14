@@ -79,99 +79,99 @@ const MultiplayerGame = ({ user }) => {
   const levelData = {
     1: {
       text: "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. The five boxing wizards jump quickly.",
-      timeLimit: 60,
+      timeLimit: 57,
     },
     2: {
       text: "A journey of a thousand miles begins with a single step. Slow and steady wins the race. Practice makes perfect every single day.",
-      timeLimit: 90,
+      timeLimit: 60,
     },
     3: {
       text: "An apple a day keeps the doctor away. Early to bed and early to rise makes a man healthy, wealthy, and wise. A penny for your thoughts.",
-      timeLimit: 120,
+      timeLimit: 63,
     },
     4: {
       text: "The sun rises in the east and sets in the west. The moon orbits around the Earth. Stars twinkle in the night sky above us all.",
-      timeLimit: 150,
+      timeLimit: 66,
     },
     5: {
       text: "Cats have nine lives, or so the old saying goes. Dogs are called man's best friend for good reason. Fish live in water and breathe through gills.",
-      timeLimit: 180,
+      timeLimit: 69,
     },
     6: {
       text: "Honey never spoils. Archaeologists found edible honey in ancient Egyptian tombs that was over three thousand years old. It remains the only food that lasts forever.",
-      timeLimit: 198,
+      timeLimit: 71,
     },
     7: {
       text: "Octopuses have three hearts and blue blood. Two hearts pump blood to the gills while the third pumps it to the rest of the body. They are remarkably intelligent creatures.",
-      timeLimit: 216,
+      timeLimit: 74,
     },
     8: {
       text: "Bananas are technically berries, while strawberries are not. Botanically speaking, a berry has seeds inside rather than outside. This surprises many people when they first learn it.",
-      timeLimit: 234,
+      timeLimit: 77,
     },
     9: {
       text: "A day on Venus is longer than its year. Venus takes two hundred forty-three Earth days to rotate once but only two hundred twenty-five days to orbit the sun. Time works differently there.",
-      timeLimit: 252,
+      timeLimit: 79,
     },
     10: {
       text: "Wombat poop is cube-shaped. This unique shape prevents it from rolling away, marking territory more effectively. Nature finds the most fascinating solutions to problems.",
-      timeLimit: 270,
+      timeLimit: 82,
     },
     11: {
       text: "The human nose can remember over fifty thousand different scents. Dogs have noses even more powerful, with up to three hundred million scent receptors compared to our mere six million.",
-      timeLimit: 288,
+      timeLimit: 85,
     },
     12: {
       text: "Lightning strikes the Earth about one hundred times every second. That's eight million times per day. Each bolt reaches temperatures hotter than the surface of the sun.",
-      timeLimit: 306,
+      timeLimit: 87,
     },
     13: {
       text: "Trees communicate with each other through underground fungal networks. They share nutrients and send warnings about pests and diseases. Scientists call this network the Wood Wide Web.",
-      timeLimit: 324,
+      timeLimit: 90,
     },
     14: {
       text: "The Great Wall of China is not visible from space with the naked eye, contrary to popular belief. Astronauts can see it only with magnification, just like many other human structures.",
-      timeLimit: 342,
+      timeLimit: 93,
     },
     15: {
       text: "The shortest war in history lasted only thirty-eight minutes. It occurred between Britain and Zanzibar in 1896. The Zanzibar forces surrendered after a brief bombardment.",
-      timeLimit: 360,
+      timeLimit: 96,
     },
     16: {
       text: "Cleopatra lived closer in time to the invention of the iPhone than to the construction of the pyramids. The Great Pyramid was built around 2560 BCE, while Cleopatra lived around 30 BCE.",
-      timeLimit: 378,
+      timeLimit: 98,
     },
     17: {
       text: "The concept of quantum entanglement suggests that particles can remain connected across vast distances. When one particle changes, its entangled partner changes instantly regardless of separation.",
-      timeLimit: 396,
+      timeLimit: 101,
     },
     18: {
       text: "Black holes are regions where gravity is so strong that nothing, not even light, can escape. They form when massive stars collapse at the end of their life cycle.",
-      timeLimit: 414,
+      timeLimit: 104,
     },
     19: {
       text: "DNA contains the instructions for building and maintaining living organisms. This molecule stores information in a code made of four chemical bases that pair together in specific combinations.",
-      timeLimit: 432,
+      timeLimit: 106,
     },
     20: {
       text: "Plate tectonics explains how Earth's outer shell is divided into plates that glide over the mantle. These plates move about as fast as fingernails grow, yet their collisions build mountains.",
-      timeLimit: 450,
+      timeLimit: 109,
     },
     21: {
       text: "It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith slipped quickly through the glass doors of Victory Mansions. - George Orwell, Nineteen Eighty-Four",
-      timeLimit: 468,
+      timeLimit: 112,
     },
     22: {
       text: "It was a pleasure to burn. It was a special pleasure to see things eaten, to see things blackened and changed. Fire was bright, and fire was clean. - Ray Bradbury, Fahrenheit 451",
-      timeLimit: 486,
+      timeLimit: 114,
     },
     23: {
       text: "In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole: it was a hobbit-hole, and that means comfort. - J.R.R. Tolkien, The Hobbit",
-      timeLimit: 504,
+      timeLimit: 117,
     },
     24: {
       text: "All children, except one, grow up. They soon know that they will grow up, and the way Wendy knew was this. One day when she was two years old she was playing in a garden. - J.M. Barrie, Peter Pan",
-      timeLimit: 522,
+      timeLimit: 119,
     },
   };
 

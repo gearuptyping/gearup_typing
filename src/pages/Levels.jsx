@@ -49,7 +49,7 @@ const Levels = ({ user }) => {
     const levels = [];
     for (let i = 1; i <= 24; i++) {
       const baseWpm = 15 + Math.floor(i * 1.5);
-      const baseTime = 45 + Math.floor(i * 2);
+      const baseTime = Math.floor(55 + i * 2.7);
       const text = getParagraphForLevel(i);
       // SINGLE COLOR for ALL levels - consistent design
       const gradient = "linear-gradient(145deg, #41588a 0%, #2a3a6a 100%)";
