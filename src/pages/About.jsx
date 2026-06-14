@@ -128,7 +128,8 @@ const About = () => {
         <section className="about-section">
           <h2>👨‍💻 Meet the Developers</h2>
           <p>
-            <strong>Maheen & Nimra</strong>
+            <strong>Maheen</strong> & <strong>Nimra</strong>
+            <br />
             We built GearUp Typing because we wanted to make typing practice
             actually fun. No boring drills. Just racing and competition.
           </p>
